@@ -1,0 +1,118 @@
+/* ===== Màn hình 12 – Hồ sơ cá nhân =====
+   Dùng lại .hm-root/.hm-stage (home.css), font + thanh trên (join.css), .wr-s/.wr-stage (waiting.css).
+   Toạ độ trong .wr-s là toạ độ ảnh mẫu 951x535 (canvas phóng 1.3459 lần). Không dùng ảnh thiết kế làm nền. */
+
+.pf-stage svg { display: block; }
+.pf-bg { position: absolute; inset: 0; }
+.pf-box > * { position: absolute; }
+.pf-box .wr-frame { left: 0; top: 0; }
+
+/* ----- tiêu đề ----- */
+.pf-title { left: 380px; top: 56px; width: 325px; height: 45px; z-index: 6; filter: drop-shadow(0 0 5px rgba(120, 190, 255, .85)) drop-shadow(0 0 12px rgba(70, 120, 255, .5)); }
+.pf-title-in { inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; color: #fff; }
+.pf-title-in b { font-size: 21px; font-weight: 700; letter-spacing: -.1px; text-shadow: 0 0 8px rgba(110, 160, 255, .7); }
+
+/* ----- menu trái ----- */
+.pf-stage .pf-nav { left: 22px; width: 140px; height: 37px; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 0 0 0 14px; border-radius: 9px; color: #fff; text-align: left; cursor: pointer;
+  border: 1.400px solid rgba(100, 170, 255, .75); background: linear-gradient(180deg, rgba(14, 26, 130, .88), rgba(8, 12, 92, .92));
+  box-shadow: 0 0 7px rgba(70, 140, 255, .55), inset 0 0 10px rgba(70, 130, 255, .2); transition: transform .12s, filter .12s; }
+.pf-stage .pf-nav b { font-size: 12.500px; font-weight: 600; letter-spacing: -.1px; white-space: nowrap; }
+.pf-stage .pf-nav svg { flex: none; width: 21px; height: 21px; }
+.pf-stage .pf-nav:hover { transform: translateX(2px); filter: brightness(1.2); }
+.pf-stage .pf-nav.on { height: 41px; border: 1.800px solid #ff86f0; background: linear-gradient(180deg, rgba(86, 30, 190, .92), rgba(40, 14, 130, .95));
+  box-shadow: 0 0 10px rgba(255, 110, 235, .85), 0 0 2px rgba(255, 210, 250, .9), inset 0 0 12px rgba(230, 120, 255, .35); cursor: default; }
+.pf-stage .pf-nav.on:hover { transform: none; filter: none; }
+.pf-stage .pf-nav:first-child { height: 35px; }
+
+/* ----- khung chính ----- */
+.pf-main { left: 190px; top: 86px; width: 672px; height: 402px; z-index: 2; filter: drop-shadow(0 0 4px rgba(90, 170, 255, .85)) drop-shadow(0 0 14px rgba(120, 90, 255, .5)); }
+
+/* ----- avatar ----- */
+.pf-av { left: 277px; top: 172px; width: 0; height: 0; z-index: 4; }
+.pf-av > * { position: absolute; }
+.pf-av-pic { left: -58px; top: -58px; width: 116px; height: 116px; border-radius: 50%; overflow: hidden; background: radial-gradient(circle at 50% 35%, #5a3ec8, #1c1470); }
+.pf-av-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pf-av-pic .emoji { position: absolute; inset: 0; display: grid; place-items: center; font-size: 64px; font-weight: 400; }
+.pf-av-ring { left: -62px; top: -62px; width: 124px; height: 124px; border-radius: 50%; box-sizing: border-box; border: 2.600px solid #e6d4ff; pointer-events: none;
+  box-shadow: 0 0 10px rgba(200, 140, 255, .95), 0 0 22px rgba(160, 90, 255, .6), inset 0 0 10px rgba(190, 130, 255, .5); }
+.pf-av-glow { left: -70px; top: -70px; width: 140px; height: 140px; border-radius: 50%; box-sizing: border-box; border: 1.200px dashed rgba(220, 180, 255, .75); animation: pf-spin 24s linear infinite; }
+@keyframes pf-spin { to { transform: rotate(360deg); } }
+.pf-crown { left: 282px; top: 82px; transform: scale(1.5); transform-origin: 50% 100%; z-index: 5; filter: drop-shadow(0 0 6px rgba(255, 190, 40, .9)); }
+
+/* ----- thông tin ----- */
+.pf-name { left: 395px; top: 128px; height: 28px; display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 700; letter-spacing: -.2px; color: #fff; z-index: 4; text-shadow: 0 0 8px rgba(120, 160, 255, .5); }
+.pf-stage .pf-sq { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 6px; color: #fff; cursor: pointer; padding: 0;
+  border: 1.200px solid rgba(130, 190, 255, .9); background: linear-gradient(180deg, #3b5cf0, #2438b8); box-shadow: 0 0 7px rgba(80, 150, 255, .8); }
+.pf-stage .pf-sq:hover, .pf-stage .pf-copy:hover { filter: brightness(1.3); }
+.pf-id { left: 395px; top: 162px; height: 20px; display: flex; align-items: center; gap: 10px; font-size: 14.500px; font-weight: 500; color: #e6ecff; z-index: 4; }
+.pf-stage .pf-copy { width: 20px; height: 20px; display: grid; place-items: center; color: #8fd0ff; cursor: pointer; padding: 0; background: none; border: 0; }
+
+.pf-lv { left: 395px; top: 193px; width: 256px; height: 25px; box-sizing: border-box; border-radius: 13px; z-index: 4; overflow: hidden; display: flex; align-items: center;
+  border: 1.200px solid rgba(110, 160, 255, .55); background: linear-gradient(180deg, rgba(8, 14, 88, .92), rgba(10, 18, 110, .85)); }
+.pf-lv i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 13px; background: linear-gradient(90deg, #3a8bff, #8a5cff); box-shadow: 0 0 8px rgba(110, 120, 255, .8); }
+.pf-lv-crown { position: relative; margin-left: 8px; display: grid; place-items: center; filter: drop-shadow(0 0 3px rgba(255, 190, 40, .8)); }
+.pf-lv b { position: relative; margin-left: 6px; font-size: 14px; font-weight: 700; color: #fff; }
+.pf-lv em { position: absolute; right: 12px; font-style: normal; font-size: 11px; font-weight: 500; color: #dfe6ff; }
+.pf-online { left: 395px; top: 230px; width: 89px; height: 21px; box-sizing: border-box; border-radius: 11px; z-index: 4; display: flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1.200px solid rgba(60, 220, 130, .65); background: rgba(14, 90, 70, .4); color: #8cf5b8; font-size: 11px; font-weight: 600; }
+.pf-online i { width: 8px; height: 8px; border-radius: 50%; background: #2bee78; box-shadow: 0 0 6px #2bee78; }
+
+/* ----- hạng ----- */
+.pf-rank { left: 672px; top: 98px; width: 180px; height: 160px; z-index: 3; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; padding-top: 14px; border-radius: 12px;
+  background: linear-gradient(180deg, rgba(40, 40, 170, .26), rgba(16, 14, 110, .12)); }
+.pf-rank b { margin-top: 2px; font-size: 16px; font-weight: 700; color: #ffd464; text-shadow: 0 0 8px rgba(255, 170, 30, .6); }
+.pf-rank span { font-size: 11px; font-weight: 500; color: #dfe6ff; margin-top: 3px; }
+
+/* ----- thống kê ----- */
+.pf-stats { left: 205px; top: 270px; width: 643px; height: 90px; z-index: 3; }
+.pf-stats-in { inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+.pf-stats-in > div { position: relative; display: flex; flex-direction: column; align-items: center; padding-top: 8px; }
+.pf-stats-in > div + div::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: rgba(130, 170, 255, .32); }
+.pf-stats-in .ic { height: 30px; display: grid; place-items: center; }
+.pf-stats-in .ic.cyan { color: #5fd8ff; filter: drop-shadow(0 0 5px rgba(60, 200, 255, .8)); }
+.pf-stats-in .ic.gold { color: #ffc83a; filter: drop-shadow(0 0 5px rgba(255, 180, 40, .8)); }
+.pf-stats-in .ic.white { color: #e8f4ff; filter: drop-shadow(0 0 5px rgba(150, 200, 255, .8)); }
+.pf-stats-in .ic.pink { color: #ff5a9a; filter: drop-shadow(0 0 5px rgba(255, 70, 140, .8)); }
+.pf-stats-in label { margin-top: 3px; font-size: 12.500px; line-height: 15px; font-weight: 500; color: #fff; }
+.pf-stats-in label.gold { color: #ffd464; }
+.pf-stats-in b { font-size: 16px; line-height: 18px; font-weight: 700; color: #fff; }
+.pf-stats-in u { text-decoration: none; font-size: 11px; line-height: 14px; font-weight: 600; }
+.pf-stats-in u.g { color: #55f08a; } .pf-stats-in u.y { color: #ffd464; } .pf-stats-in u.p { color: #ff6a9c; }
+
+/* ----- thành tích / phần thưởng ----- */
+.pf-ach { left: 208px; top: 370px; width: 312px; height: 106px; z-index: 3; }
+.pf-rew { left: 536px; top: 370px; width: 313px; height: 100px; z-index: 3; }
+.pf-h { left: 14px; top: 8px; display: flex; align-items: center; gap: 9px; color: #fff; z-index: 2; }
+.pf-h b { font-size: 13.500px; font-weight: 600; letter-spacing: -.1px; }
+.pf-rew .pf-h { left: 14px; }
+.pf-medals { left: 0; right: 0; top: 30px; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+.pf-medals > div { display: flex; flex-direction: column; align-items: center; }
+.pf-medals label { margin-top: 1px; font-size: 10.500px; line-height: 13px; font-weight: 500; color: #e6ecff; white-space: nowrap; }
+.pf-medals label.gold { color: #ffd464; }
+.pf-medals b { font-size: 11px; line-height: 13px; font-weight: 600; color: #fff; }
+.pf-rew-in { left: 0; right: 0; top: 36px; bottom: 6px; display: grid; grid-template-columns: repeat(3, 1fr); }
+.pf-rew-in > div { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.pf-rew-in b { font-size: 14px; font-weight: 700; }
+.pf-rew-in .gold b { color: #ffd464; text-shadow: 0 0 6px rgba(255, 170, 30, .6); }
+.pf-rew-in .cyan b { color: #8fe9ff; text-shadow: 0 0 6px rgba(70, 190, 255, .6); }
+.pf-rew-in .gem svg { width: 32px; height: 32px; filter: drop-shadow(0 0 5px rgba(90, 200, 255, .8)); }
+.pf-rew-in svg { filter: drop-shadow(0 0 5px rgba(255, 200, 80, .6)); }
+
+/* ----- nút chỉnh sửa ----- */
+.pf-stage .pf-edit { left: 763px; top: 490px; width: 132px; height: 34px; z-index: 5; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0; border-radius: 17px; color: #fff; cursor: pointer;
+  border: 1.600px solid rgba(214, 150, 255, .95); background: linear-gradient(180deg, #4b2bbd, #2a1488);
+  box-shadow: 0 0 11px rgba(190, 100, 255, .9), 0 0 2px rgba(240, 200, 255, .9), inset 0 0 12px rgba(200, 140, 255, .3); transition: transform .12s, filter .12s; }
+.pf-stage .pf-edit b { font-size: 12.500px; font-weight: 600; letter-spacing: -.1px; }
+.pf-stage .pf-edit:hover { transform: translateY(-1px); filter: brightness(1.2); }
+.pf-stage .pf-edit:active { transform: scale(.98); }
+
+/* ----- logo (toạ độ stage 1280x720) ----- */
+.pf-logo { position: absolute; left: 18px; top: 10px; width: 180px; pointer-events: none; z-index: 6; filter: drop-shadow(0 0 10px rgba(80, 160, 255, .5)); }
+.pf-stage .hm-currency { left: 411px; top: 14px; }
+.pf-stage .hm-icons { z-index: 7; }
+.pf-stage .hm-currency { z-index: 7; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-av-glow { animation: none; }
+  .pf-stage .hm-petal { display: none; }
+}
