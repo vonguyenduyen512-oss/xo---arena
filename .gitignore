@@ -1,0 +1,9 @@
+﻿node_modules/
+.env
+.env.*
+server/*.json
+!server/package.json
+!server/package-lock.json
+server/*.bak
+server/*.backup-*
+server/*.balance-backup
