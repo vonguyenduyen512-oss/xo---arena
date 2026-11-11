@@ -10,7 +10,6 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.3",
-    "socket.io": "^4.8.1",
-    "xo-arena-client": "file:.."
+    "socket.io": "^4.8.1"
   }
 }
