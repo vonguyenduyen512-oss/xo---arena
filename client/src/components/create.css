@@ -1,0 +1,157 @@
+/* ===== Màn hình Tạo phòng — canvas 1280x720 (dùng chung khung .hm-root/.hm-stage của Home) ===== */
+.cr-stage { font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; }
+.cr-stage svg { display: block; }
+.cr-stage input { font-family: inherit; }
+
+/* ----- nền phụ ----- */
+.cr-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(130, 120, 255, .10) 0 1px, transparent 1px 90px),
+    repeating-linear-gradient(0deg, rgba(130, 120, 255, .10) 0 1px, transparent 1px 44px),
+    linear-gradient(180deg, rgba(40, 20, 150, 0), rgba(70, 30, 190, .55)); }
+.cr-glow { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse 34% 52% at 62% 46%, rgba(50, 80, 255, .50), transparent 72%),
+    radial-gradient(ellipse 26% 50% at 20% 52%, rgba(160, 80, 255, .50), transparent 72%),
+    radial-gradient(ellipse 24% 48% at 90% 58%, rgba(200, 80, 255, .42), transparent 72%),
+    linear-gradient(180deg, rgba(40, 70, 230, .22), rgba(100, 50, 220, .20)); }
+.cr-girl { position: absolute; left: 164px; top: 65px; width: 261px; height: 391px; pointer-events: none;
+  filter: drop-shadow(0 0 22px rgba(170, 90, 255, .55)); animation: hm-float 6s ease-in-out infinite; }
+.cr-swirl { position: absolute; left: 14px; top: 462px; width: 440px; height: 200px; pointer-events: none; opacity: 1;
+  filter: drop-shadow(0 0 8px #ff6fe0) drop-shadow(0 0 16px rgba(190, 100, 255, .8)); }
+.cr-xblock { position: absolute; left: 158px; top: 452px; width: 100px; height: 90px; pointer-events: none;
+  filter: drop-shadow(0 0 14px rgba(70, 170, 255, .9)); animation: hm-float 5s ease-in-out -1s infinite; }
+.cr-logo { position: absolute; left: 933px; top: 46px; width: 132px; pointer-events: none; filter: drop-shadow(0 0 14px rgba(80, 160, 255, .7)); }
+
+/* ----- banner "Tạo phòng ngay" ----- */
+.cr-banner { position: absolute; left: 62px; top: 528px; width: 336px; height: 88px; display: flex; align-items: center; gap: 14px; padding: 0 22px 0 24px;
+  transform: rotate(-5deg); border-radius: 44px 10px 44px 44px; border: 2px solid rgba(150, 140, 255, .9);
+  background: linear-gradient(180deg, rgba(30, 36, 130, .96), rgba(10, 12, 70, .97));
+  box-shadow: 0 0 18px rgba(150, 100, 255, .8), inset 0 0 16px rgba(120, 100, 255, .35); }
+.cr-banner::after { content: ''; position: absolute; right: 18px; top: -16px; width: 34px; height: 24px; background: inherit;
+  border-top: 2px solid rgba(150, 140, 255, .9); border-right: 2px solid rgba(150, 140, 255, .9);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%); transform: none; }
+.cr-banner-crown { flex: none; filter: drop-shadow(0 0 8px rgba(255, 190, 40, .9)); }
+.cr-banner b { display: block; font-size: 21px; font-weight: 800; font-style: italic; line-height: 1.15; text-shadow: 0 0 10px #4a8cff, 0 2px 0 rgba(0, 0, 60, .8); }
+.cr-banner i { display: block; font-size: 20px; font-weight: 800; font-style: italic; line-height: 1.2; color: #ffd24a; text-shadow: 0 0 10px rgba(255, 150, 20, .8), 0 2px 0 rgba(60, 20, 0, .8); }
+
+/* ----- menu trái ----- */
+.cr-side { position: absolute; left: 13px; top: 108px; width: 150px; padding: 7px; display: flex; flex-direction: column; gap: 4px; border-radius: 16px; z-index: 5;
+  background: linear-gradient(180deg, rgba(30, 28, 130, .78), rgba(14, 12, 80, .85)); border: 1.5px solid rgba(110, 140, 255, .6); backdrop-filter: blur(6px);
+  box-shadow: 0 0 18px rgba(70, 110, 255, .45), inset 0 0 18px rgba(80, 80, 255, .2); }
+.cr-side .hm-nav { height: 45px; padding: 0 8px; gap: 7px; font-size: 12px; font-weight: 600; letter-spacing: .1px; border-radius: 11px; cursor: pointer; }
+.cr-side .hm-nav span { white-space: nowrap; }
+.cr-side .hm-nav.on { border-color: #ff8bec; background: linear-gradient(90deg, rgba(200, 70, 240, .6), rgba(110, 60, 240, .5));
+  box-shadow: 0 0 16px rgba(255, 90, 235, .95), inset 0 0 12px rgba(255, 200, 250, .3); }
+.k-home svg { color: #fff; } .k-trophy svg { color: #ffd0f4; } .k-join svg { color: #ff9be0; } .k-rank svg { color: #ffd24a; }
+.k-user svg { color: #7cc8ff; } .k-gear svg { color: #c4a3ff; } .k-exit svg { color: #8fb4ff; }
+
+/* ----- khung SVG ----- */
+.cr-frame { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none;
+  filter: drop-shadow(0 0 7px rgba(70, 150, 255, .95)) drop-shadow(0 0 20px rgba(70, 100, 255, .55)); }
+.cr-preview .cr-frame { filter: drop-shadow(0 0 7px rgba(190, 150, 255, .9)) drop-shadow(0 0 20px rgba(255, 90, 210, .45)); }
+
+/* ----- bảng thiết lập ----- */
+.cr-panel { position: absolute; left: 435px; top: 86px; width: 489px; height: 497px; color: #fff; z-index: 4; }
+.cr-panel > * { position: absolute; }
+.cr-panel > .cr-frame { position: absolute; }
+.cr-head { left: 0; top: 0; width: 440px; height: 57px; }
+.cr-head svg { position: absolute; left: 40px; top: 0; filter: drop-shadow(0 0 8px #3fb0ff); }
+.cr-head h1 { position: absolute; left: 114px; top: 1px; margin: 0; font-size: 26px; font-weight: 800; line-height: 32px; letter-spacing: -.2px; text-shadow: 0 0 10px rgba(100, 170, 255, .6); }
+.cr-head p { position: absolute; left: 114px; top: 33px; margin: 0; font-size: 13.5px; font-weight: 500; color: #8fb8ff; white-space: nowrap; }
+
+.cr-lb { left: 32px; height: 20px; display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 700; white-space: nowrap; }
+.cr-lb svg { flex: none; color: #8fe0ff; overflow: visible; filter: drop-shadow(0 0 5px rgba(80, 190, 255, .8)); }
+.cr-lb.gold svg { color: #ffc83a; filter: drop-shadow(0 0 5px rgba(255, 170, 30, .7)); }
+.cr-lb em { font-style: normal; font-weight: 500; color: #b9c6ff; }
+
+/* ô nhập */
+.cr-field { left: 24px; width: 441px; height: 38px; display: flex; align-items: center; border-radius: 14px; overflow: hidden;
+  border: 1.5px solid rgba(120, 160, 255, .8); background: rgba(8, 12, 80, .88); box-shadow: 0 0 10px rgba(70, 130, 255, .35), inset 0 0 12px rgba(40, 60, 200, .3); transition: box-shadow .15s, border-color .15s; }
+.cr-field:focus-within { border-color: #9fd8ff; box-shadow: 0 0 16px rgba(90, 190, 255, .8), inset 0 0 12px rgba(40, 60, 200, .3); }
+.cr-fl { flex: none; width: 43px; height: 100%; display: grid; place-items: center; color: #fff; background: rgba(40, 56, 170, .45); border-right: 1.5px solid rgba(120, 160, 255, .55); }
+.cr-field input { flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; outline: 0; background: transparent; color: #fff; font-size: 15px; font-weight: 500; }
+.cr-field input::placeholder { color: #9aa8e6; }
+.cr-sep { flex: none; width: 1.5px; height: 20px; background: rgba(130, 160, 255, .45); }
+.cr-fr { flex: none; width: 41px; height: 100%; display: grid; place-items: center; color: #fff; }
+.cr-stage button.cr-fr { background: none; border: 0; padding: 0; cursor: pointer; }
+.cr-stage button.cr-fr:hover { color: #9fe3ff; }
+
+/* thẻ chế độ chơi */
+.cr-modes { left: 24px; top: 189px; width: 441px; display: grid; grid-template-columns: repeat(2, 211px); gap: 19px; }
+.cr-stage .cr-mode { position: relative; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; border-radius: 13px;
+  font-size: 14.5px; font-weight: 600; color: #b4bdf0; border: 1.5px solid rgba(120, 130, 235, .6);
+  background: linear-gradient(180deg, rgba(40, 48, 160, .38), rgba(20, 26, 110, .5)); transition: transform .12s, border-color .15s, box-shadow .15s, color .15s; }
+.cr-mode svg { filter: drop-shadow(0 0 5px rgba(150, 160, 255, .7)); }
+.cr-stage .cr-mode:hover { transform: translateY(-2px); border-color: rgba(160, 190, 255, .9); color: #e6ebff; }
+.cr-stage .cr-mode.on { color: #fff; border: 2.5px solid #5fd2ff;
+  background: linear-gradient(180deg, rgba(30, 90, 235, .6), rgba(16, 40, 170, .65));
+  box-shadow: 0 0 14px rgba(70, 190, 255, .95), inset 0 0 18px rgba(70, 170, 255, .55); }
+.cr-mode.on svg { filter: drop-shadow(0 0 8px #5fd2ff); }
+.cr-check { position: absolute; right: -4px; top: -4px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #1a3aa8;
+  background: linear-gradient(180deg, #d4f1ff, #7fc8ff); box-shadow: 0 0 8px rgba(120, 210, 255, .95); }
+
+/* radio */
+.cr-ppl, .cr-vis { left: 24px; width: 441px; height: 24px; }
+.cr-ppl { top: 309px; } .cr-vis { top: 459px; }
+.cr-ppl label, .cr-vis label { position: absolute; top: 0; height: 24px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; color: #e4e9ff; cursor: pointer; white-space: nowrap; }
+.cr-ppl input, .cr-vis input { position: absolute; opacity: 0; pointer-events: none; }
+.cr-ppl label.one svg { color: #d7e2ff; filter: drop-shadow(0 0 5px rgba(120, 170, 255, .5)); }
+.cr-ppl label.one.on svg { color: #fff; filter: drop-shadow(0 0 7px #5fd2ff); }
+.cr-ppl label.one.on span { color: #fff; font-weight: 600; }
+.rd i { flex: none; position: relative; width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(120, 140, 255, .9); background: rgba(8, 12, 80, .6); transition: .15s; }
+.rd.on i { border-color: #6fd0ff; box-shadow: 0 0 10px rgba(80, 190, 255, .9), inset 0 0 8px rgba(80, 190, 255, .5); }
+.rd.on i::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: radial-gradient(circle, #fff, #8fe0ff); box-shadow: 0 0 8px #9fe8ff; }
+.cr-vis .rd svg { color: #c9d4ff; margin-left: -2px; margin-right: -4px; }
+.rd:hover i { border-color: #9fd8ff; }
+
+/* ----- xem trước ----- */
+.cr-preview { position: absolute; left: 939px; top: 157px; width: 327px; height: 424px; color: #fff; z-index: 4; }
+.cr-preview > * { position: absolute; }
+.cr-ph { left: 23px; top: 14px; height: 28px; display: flex; align-items: center; gap: 17px; filter: drop-shadow(0 0 6px rgba(255, 180, 40, .7)); }
+.cr-ph b { font-size: 15px; font-weight: 600; filter: none; text-shadow: none; }
+.cr-ph-line { left: 14px; right: 14px; top: 49px; height: 1.5px; background: linear-gradient(90deg, transparent, rgba(150, 170, 255, .55), transparent); }
+.cr-thumb { left: 17px; top: 59px; width: 294px; height: 187px; border-radius: 15px 15px 0 0; background-size: cover; background-position: center;
+  border: 1.5px solid rgba(140, 170, 255, .55); box-shadow: 0 0 12px rgba(80, 130, 255, .45); }
+.cr-info { left: 17px; top: 246px; width: 294px; height: 165px; border-radius: 18px; border: 1.5px solid rgba(120, 150, 255, .5);
+  background: linear-gradient(180deg, rgba(22, 30, 125, .88), rgba(14, 18, 96, .92)); box-shadow: inset 0 0 14px rgba(70, 90, 230, .35); }
+.cr-info > * { position: absolute; }
+.cr-info .r0 { left: 22px; top: 8px; height: 22px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #eef1ff; }
+.cr-info .rv { left: 52px; top: 30px; right: 10px; height: 22px; display: flex; align-items: center; font-size: 13.5px; white-space: nowrap; overflow: hidden; }
+.cr-info .rv b { font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.cr-info .row { left: 0; right: 0; height: 33px; display: flex; align-items: center; border-top: 1.5px solid rgba(120, 150, 255, .28); font-size: 13px; }
+.cr-info .r1 { top: 57px; } .cr-info .r2 { top: 91px; } .cr-info .r3 { top: 125px; height: 34px; }
+.cr-info .row .ic { width: 22px; margin-left: 22px; display: grid; place-items: center; color: #e8edff; }
+.cr-info .row .lb { margin-left: 10px; width: 80px; font-weight: 500; color: #f1f3ff; white-space: nowrap; }
+.cr-info .row .val { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; font-weight: 500; color: #f1f3ff; white-space: nowrap; }
+.cr-info .row .val .x { width: 22px; display: grid; place-items: center; color: #d8e4ff; }
+
+/* ----- nút dưới ----- */
+.cr-stage .cr-back { position: absolute; left: 467px; top: 603px; width: 202px; height: 60px; display: flex; align-items: center; justify-content: center; gap: 14px; z-index: 5;
+  border-radius: 20px; border: 2px solid rgba(215, 200, 255, .85); color: #fff; font-size: 18px; font-weight: 600;
+  background: linear-gradient(180deg, #6a36e6, #3b1fa6); box-shadow: 0 0 14px rgba(150, 110, 255, .8), inset 0 0 14px rgba(190, 150, 255, .35);
+  transition: transform .12s, filter .12s; }
+.cr-stage .cr-back b { font-weight: 600; }
+.cr-stage .cr-back:hover { transform: translateY(-2px); filter: brightness(1.2); }
+.cr-create-wrap { position: absolute; left: 709px; top: 600px; width: 319px; height: 63px; z-index: 5; transition: transform .12s;
+  filter: drop-shadow(0 0 12px rgba(255, 160, 30, .95)) drop-shadow(0 0 26px rgba(255, 120, 0, .55)); }
+.cr-create-wrap:hover { transform: translateY(-2px) scale(1.015); }
+.cr-create-wrap:active { transform: scale(.985); }
+.cr-stage .cr-create { width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 36px; color: #fff; font-size: 23px; font-weight: 600;
+  background: linear-gradient(180deg, #ffc23a 0%, #ff9a14 50%, #ff7a00 100%);
+  clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 24px 100%, 0 50%);
+  box-shadow: inset 0 3px 0 rgba(255, 245, 190, .9); text-shadow: 0 2px 4px rgba(150, 50, 0, .55); }
+.cr-create b { font-weight: 700; letter-spacing: .2px; }
+.cr-create svg { filter: drop-shadow(0 2px 3px rgba(150, 50, 0, .5)); }
+
+/* ----- thanh dưới ----- */
+.cr-stage .cr-notice { position: absolute; left: 16px; top: 663px; width: 447px; height: 40px; display: flex; align-items: center; gap: 12px; padding: 0 16px 0 18px; z-index: 5; text-align: left;
+  border-radius: 14px; border: 1.5px solid rgba(130, 130, 255, .8); font-size: 13.5px; color: #fff;
+  background: linear-gradient(180deg, rgba(24, 28, 120, .92), rgba(10, 12, 74, .95)); box-shadow: 0 0 12px rgba(100, 100, 255, .5); }
+.cr-notice svg:first-child { flex: none; color: #ffc83a; filter: drop-shadow(0 0 5px rgba(255, 180, 40, .8)); }
+.cr-notice span { flex: 1; white-space: nowrap; font-weight: 500; }
+.cr-notice span b { color: #ffd24a; font-weight: 700; }
+.cr-net { position: absolute; left: 1009px; top: 663px; width: 254px; height: 40px; display: flex; align-items: center; justify-content: center; gap: 9px; z-index: 5;
+  border-radius: 14px; border: 1.5px solid rgba(130, 130, 255, .8); font-size: 12.5px; font-weight: 500; color: #fff;
+  background: linear-gradient(180deg, rgba(24, 28, 120, .92), rgba(10, 12, 74, .95)); box-shadow: 0 0 12px rgba(100, 100, 255, .5); }
+.cr-net svg { filter: drop-shadow(0 0 5px rgba(46, 234, 122, .8)); }

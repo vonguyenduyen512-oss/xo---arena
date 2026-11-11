@@ -1,0 +1,152 @@
+/* ===== Màn hình Tham gia phòng =====
+   .hm-root / .hm-stage lấy từ home.css (1280x720, tự thu phóng).
+   Bên trong, .jr-s là canvas 954x537 (đúng kích thước ảnh mẫu) phóng 1.3417 lần
+   => mọi toạ độ dưới đây là toạ độ trên ảnh mẫu. */
+
+.jr-stage { font-family: 'Inter Tight', 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; }
+.jr-stage svg { display: block; }
+.jr-stage button { font-family: inherit; }
+.jr-stage input { font-family: inherit; }
+.jr-s { position: absolute; left: 0; top: 0; width: 954px; height: 537px; transform: scale(1.3417); transform-origin: 0 0; z-index: 3; }
+.jr-s > * { position: absolute; }
+
+/* ----- nền (ảnh nền mờ lấy từ bản thiết kế) ----- */
+.jr-bg { position: absolute; inset: 0; background: #0b1480 url(/img/join-bg.jpg) center / 100% 100% no-repeat; }
+
+/* ----- logo + thanh trên (chỉnh lại cho đúng vị trí ảnh mẫu) ----- */
+.jr-logo { position: absolute; left: 904px; top: 12px; width: 185px; pointer-events: none; z-index: 6; filter: drop-shadow(0 0 10px rgba(80, 160, 255, .5));
+  }
+.jr-stage .hm-currency { left: 411px; top: 16px; gap: 17px; }
+.jr-stage .hm-chip { min-width: 151px; height: 37px; }
+.jr-stage .hm-icons { right: 9px; top: 12px; gap: 9px; }
+.jr-stage .hm-round { width: 43px; height: 43px; }
+
+/* ----- nhân vật ----- */
+.jr-girl { left: 0; top: 62px; width: 296px; height: 330px; pointer-events: none; z-index: 1;
+  filter: drop-shadow(0 0 14px rgba(150, 90, 255, .35)); }
+.jr-banner { left: 9px; top: 391px; width: 292px; height: 60px; z-index: 3; display: flex; align-items: center; gap: 13px; padding: 0 16px 0 22px;
+  transform: rotate(-5deg); transform-origin: 50% 50%;
+  border-radius: 30px 8px 30px 30px; border: 1.5px solid rgba(150, 140, 255, .85);
+  background: linear-gradient(180deg, rgba(26, 30, 124, .96), rgba(8, 10, 66, .97));
+  box-shadow: 0 0 14px rgba(150, 100, 255, .75), inset 0 0 14px rgba(120, 100, 255, .32); }
+.jr-banner::after { content: ''; position: absolute; right: 12px; top: -12px; width: 26px; height: 18px; background: inherit;
+  border-top: 1.5px solid rgba(150, 140, 255, .85); border-right: 1.5px solid rgba(150, 140, 255, .85);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%); }
+.jr-banner-crown { flex: none; filter: drop-shadow(0 0 7px rgba(255, 190, 40, .9)); }
+.jr-banner b { display: block; font-size: 18.100px; font-weight: 800; font-style: italic; line-height: 26px; letter-spacing: 0; text-shadow: 0 0 9px #4a8cff, 0 2px 0 rgba(0, 0, 60, .8); }
+.jr-banner i { display: block; font-size: 17.900px; font-weight: 800; font-style: italic; line-height: 26px; letter-spacing: 0; color: #ffd24a; text-shadow: 0 0 9px rgba(255, 150, 20, .8), 0 2px 0 rgba(60, 20, 0, .8); }
+
+/* ----- khung SVG ----- */
+.jr-frame { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(70, 160, 255, .95)) drop-shadow(0 0 12px rgba(70, 110, 255, .6)); }
+.jr-fb { filter: drop-shadow(0 0 2px #9fdcff) drop-shadow(0 0 8px rgba(70, 150, 255, .95)) drop-shadow(0 0 20px rgba(60, 100, 255, .65)); }
+.jr-fh { filter: drop-shadow(0 0 2px #9fdcff) drop-shadow(0 0 8px rgba(70, 150, 255, .9)); }
+.jr-fbi { filter: none; opacity: .55; }
+.jr-corners { position: absolute; left: 0; top: 0; pointer-events: none; filter: drop-shadow(0 0 4px #5fb4ff); }
+.jr-fl { filter: drop-shadow(0 0 4px rgba(200, 150, 255, .85)) drop-shadow(0 0 12px rgba(255, 90, 210, .4)); }
+
+/* ----- bảng nhập mã (gốc 300,94) ----- */
+.jr-join { left: 300px; top: 94px; width: 283px; height: 343px; z-index: 4; color: #fff; }
+.jr-join > * { position: absolute; }
+.jr-hico { left: 36px; top: 16px; color: #e6f0ff; filter: drop-shadow(0 0 5px rgba(120, 190, 255, .8)); }
+.jr-htitle { left: 82px; top: 13px; margin: 0; font-size: 20.500px; font-weight: 700; line-height: 30px; letter-spacing: -.1px; white-space: nowrap; text-shadow: 0 0 8px rgba(100, 170, 255, .5); }
+.jr-hsub { left: 145.700px; top: 48px; margin: 0; font-size: 11.600px; font-weight: 500; line-height: 14px; transform: translateX(-50%); color: #9cc8ff; white-space: nowrap; }
+
+.jr-field { left: 14px; top: 102px; width: 253.500px; height: 47.500px; display: flex; align-items: center; border-radius: 11px; cursor: text;
+  border: 1.5px solid rgba(100, 150, 255, .85); background: linear-gradient(180deg, rgba(6, 10, 74, .92), rgba(8, 14, 90, .92));
+  box-shadow: 0 0 8px rgba(70, 130, 255, .4), inset 0 0 12px rgba(30, 50, 190, .35); transition: box-shadow .15s, border-color .15s; }
+.jr-field.jr-code { top: 86px; height: 44px; }
+.jr-field.jr-pw { top: 138px; height: 44px; }
+.jr-field:focus-within { border-color: #a6dcff; box-shadow: 0 0 12px rgba(90, 190, 255, .85), inset 0 0 12px rgba(30, 50, 190, .35); }
+.jr-kb { flex: none; margin-left: 12px; display: grid; place-items: center; filter: drop-shadow(0 0 4px rgba(90, 160, 255, .7)); }
+.jr-field input { flex: 1; min-width: 0; height: 100%; padding: 0 8px 0 15px; border: 0; outline: 0; background: transparent; color: #fff; font-size: 13px; font-weight: 500; letter-spacing: .6px; }
+.jr-field input::placeholder { color: #98a6e8; letter-spacing: 0; font-weight: 500; }
+.jr-stage .jr-x { flex: none; width: 41px; height: 100%; display: grid; place-items: center; color: #6fb6ff; background: none; border: 0; padding: 0; cursor: pointer; filter: drop-shadow(0 0 4px rgba(90, 170, 255, .7)); }
+.jr-stage .jr-x:hover { color: #bfe4ff; }
+
+.jr-go-wrap { left: 35px; top: 196px; width: 214px; height: 49px; transition: transform .12s;
+  filter: drop-shadow(0 0 4px rgba(255, 190, 40, 1)) drop-shadow(0 0 9px rgba(255, 140, 10, .9)) drop-shadow(0 0 18px rgba(255, 110, 0, .55)); }
+.jr-go-wrap:hover { transform: translateY(-1px) scale(1.015); }
+.jr-go-wrap:active { transform: scale(.985); }
+.jr-stage .jr-go { position: absolute; inset: 0; padding: 2px; color: #fff; cursor: pointer;
+  background: linear-gradient(180deg, #fff7c8, #ffd23e 50%, #ffc21a);
+  clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 15px 100%, 0 50%); }
+.jr-go-in { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 16px; padding-left: 3px;
+  background: radial-gradient(ellipse 70% 120% at 30% 45%, #ffa51f, rgba(255, 140, 10, 0) 70%), linear-gradient(180deg, #ff9a12, #ff7300 60%, #f06400);
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 14px 100%, 0 50%);
+  box-shadow: inset 0 2px 0 rgba(255, 235, 170, .55); text-shadow: 0 2px 3px rgba(150, 50, 0, .55); }
+.jr-go-in b { font-size: 17px; font-weight: 600; letter-spacing: .1px; }
+.jr-go-in svg { filter: drop-shadow(0 2px 2px rgba(150, 50, 0, .45)); }
+
+.jr-or { left: 31px; top: 258px; width: 220px; height: 15px; display: flex; align-items: center; justify-content: space-between; font-size: 12.700px; font-weight: 600; color: #eef1ff; }
+.jr-or i { display: block; width: 85px; height: 1px; background: linear-gradient(90deg, rgba(150, 180, 255, .15), rgba(160, 190, 255, .85) 20%, rgba(160, 190, 255, .85) 80%, rgba(150, 180, 255, .15)); }
+.jr-or span { margin: 0 -1px; line-height: 15px; }
+
+.jr-stage .jr-refresh { left: 48.500px; top: 284px; width: 188px; height: 38px; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0;
+  border-radius: 19px; border: 1.5px solid rgba(200, 180, 255, .95); color: #fff; font-size: 12.500px; font-weight: 600;
+  background: linear-gradient(180deg, #6c3ff0, #3d22b6); box-shadow: 0 0 10px rgba(150, 110, 255, .75), inset 0 0 12px rgba(190, 150, 255, .3); transition: transform .12s, filter .12s; }
+.jr-stage .jr-refresh b { font-weight: 600; }
+.jr-stage .jr-refresh:hover { transform: translateY(-1px); filter: brightness(1.2); }
+
+/* ----- danh sách phòng (gốc 582,124) ----- */
+.jr-list { left: 582px; top: 124px; width: 357px; height: 319px; z-index: 4; color: #fff; }
+.jr-list > * { position: absolute; }
+.jr-lh { left: 22px; top: 7px; height: 25px; display: flex; align-items: center; gap: 10px; }
+.jr-lh svg { filter: drop-shadow(0 0 5px rgba(255, 180, 40, .75)); }
+.jr-lh b { font-size: 12.700px; font-weight: 700; letter-spacing: -.1px; }
+.jr-on { left: 270px; top: 11px; height: 20px; display: flex; align-items: center; gap: 5px; font-size: 8.700px; font-weight: 500; color: #c3cdf5; white-space: nowrap; }
+.jr-on i { width: 8px; height: 8px; border-radius: 50%; background: #2eea7a; box-shadow: 0 0 6px #2eea7a; }
+.jr-on em { font-style: normal; font-weight: 600; color: #fff; }
+.jr-lline { left: 20px; width: 317px; top: 37px; height: 1.500px; background: linear-gradient(90deg, rgba(120, 150, 255, 0), #7aa4ff 18%, #b090ff 70%, rgba(190, 140, 255, 0)); }
+
+.jr-cols, .jr-row { left: 0; width: 357px; }
+.jr-cols span, .jr-row > span { position: absolute; top: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; }
+.c0 { left: 18px; width: 31px; justify-content: center; }
+.c1 { left: 57px; }
+.c2 { left: 155px; }
+.c3 { left: 232px; width: 48px; justify-content: center; }
+.c4 { left: 293px; width: 51.500px; justify-content: center; }
+.jr-cols { top: 44px; height: 21px; font-size: 8.800px; font-weight: 600; color: #e1e7ff; }
+.jr-cols .c2 { left: 143px; width: 73px; justify-content: center; }
+
+.jr-rows { left: 0; top: 70.500px; width: 357px; height: 220px; }
+.jr-stage .jr-row { position: absolute; display: block; height: 26px; width: 357px; text-align: left; font-size: 9.500px; font-weight: 500; color: #fff; cursor: pointer; border-radius: 0; transition: background .12s; }
+.jr-stage .jr-row::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 0; height: 1px; background: rgba(130, 160, 255, .16); }
+.jr-stage .jr-row:hover, .jr-stage .jr-row.sel { background: rgba(110, 140, 255, .16); }
+.jr-row .c0 u { text-decoration: none; display: grid; place-items: center; width: 31px; height: 18px; border-radius: 9px; background: rgba(14, 22, 110, .45); font-size: 11.300px; font-weight: 500; }
+.jr-row .c2 { gap: 4px; font-size: 8.500px; color: #eaf0ff; }
+.jr-row .c2 svg { filter: drop-shadow(0 0 3px rgba(140, 200, 255, .8)); }
+.jr-row .c3 { font-size: 10.200px; }
+.jr-row .c4 em { font-style: normal; display: grid; place-items: center; width: 51.500px; height: 18px; border-radius: 9px; font-size: 9.200px; font-weight: 600; letter-spacing: -.1px;
+  border: 1px solid rgba(255, 255, 255, .2); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .32), 0 0 6px rgba(40, 120, 255, .45); }
+.jr-row .c4 em.wait { background: linear-gradient(180deg, #3a8cff, #1f5ee0); }
+.jr-row .c4 em.play { background: linear-gradient(180deg, #25b95a, #12893f); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 0 6px rgba(40, 200, 100, .4); }
+
+.jr-row .c1 { width: 84px; gap: 3px; overflow: hidden; }
+.jr-row .c1 s { text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jr-row .c1 .jr-lk { font-style: normal; font-size: 8px; flex: none; }
+.jr-empty { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font-size: 11px; line-height: 17px; color: #b4c4ff; }
+.jr-pager { left: 0; top: 285px; width: 357px; height: 20px; }
+.jr-pager > * { position: absolute; top: 0; height: 20px; display: grid; place-items: center; }
+.jr-stage .jr-pager button { width: 22px; color: #b4c8ff; cursor: pointer; filter: drop-shadow(0 0 4px rgba(120, 150, 255, .8)); transition: color .12s, transform .12s; }
+.jr-stage .jr-pager button:hover:not(:disabled) { color: #d4e2ff; transform: scale(1.1); }
+.jr-stage .jr-pager button:disabled { opacity: .8; cursor: default; }
+.jr-pager .pv { left: 121px; } .jr-pager .nx { left: 232px; }
+.jr-pager .pn { left: 149px; width: 77.500px; border-radius: 8px; background: rgba(8, 12, 76, .72); font-size: 13.200px; font-weight: 500; color: #eef1ff; }
+
+/* ----- thanh dưới ----- */
+.jr-stage .jr-back { left: 13px; top: 481px; width: 119.500px; height: 37.500px; display: flex; align-items: center; justify-content: center; gap: 15px; padding: 0; z-index: 5;
+  border-radius: 19px; border: 1.5px solid rgba(160, 170, 255, .85); color: #fff; font-size: 13.400px; font-weight: 600;
+  background: linear-gradient(180deg, rgba(26, 32, 140, .96), rgba(10, 14, 84, .97)); box-shadow: 0 0 9px rgba(110, 120, 255, .55), inset 0 0 10px rgba(80, 90, 230, .35); transition: transform .12s, filter .12s; }
+.jr-stage .jr-back b { font-weight: 600; }
+.jr-stage .jr-back:hover { transform: translateY(-1px); filter: brightness(1.2); }
+.jr-stage .jr-notice { left: 152px; top: 487px; width: 446px; height: 30px; display: flex; align-items: center; gap: 11px; padding: 0 16px 0 10px; z-index: 5; text-align: left;
+  border-radius: 15px; border: 1.5px solid rgba(120, 130, 255, .7); font-size: 9.100px; color: #fff;
+  background: linear-gradient(180deg, rgba(20, 26, 116, .86), rgba(8, 10, 70, .9)); box-shadow: 0 0 9px rgba(100, 100, 255, .4); }
+.jr-notice svg { flex: none; color: #ffc83a; filter: drop-shadow(0 0 4px rgba(255, 180, 40, .8)); }
+.jr-notice span { white-space: nowrap; font-weight: 500; }
+.jr-notice span b { color: #ffd24a; font-weight: 700; margin-right: 2px; }
+
+.jr-tag { left: 694px; top: 485px; width: 245px; font-family: 'Dancing Script', 'Segoe Script', cursive; font-size: 18.100px; font-weight: 700; line-height: 30px; white-space: nowrap; color: #fff; -webkit-text-stroke: .9px #fff;
+  transform: rotate(-5.500deg); transform-origin: 0 100%; text-shadow: 0 0 6px #d58bff, 0 0 14px rgba(190, 100, 255, .85); z-index: 5; pointer-events: none; }
+.jr-swoosh { left: 740px; top: 497px; width: 198px; height: 40px; overflow: visible; pointer-events: none; z-index: 4; filter: drop-shadow(0 0 5px #d070ff) drop-shadow(0 0 10px rgba(190, 100, 255, .7)); }

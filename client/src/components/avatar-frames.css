@@ -1,0 +1,31 @@
+.avatar-frame-november { border: 4px solid #ffd65c !important; border-radius: 50%; box-shadow: 0 0 0 3px #a34cff, 0 0 13px 5px #f4aaff, inset 0 0 8px #ffe487 !important; position: relative; }
+.hud-avatar-frame { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; border-radius: 50%; }
+.hud-avatar-frame img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.frame-inventory { display: flex; gap: 12px; margin: 8px 0 16px; }
+.frame-item { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px; flex: 1; border: 1px solid #9061e8; border-radius: 12px; background: #2b1159; color: white; cursor: pointer; }
+.frame-item.selected { border: 2px solid #ffd45a; background: #51218a; }
+.frame-item:disabled { opacity: .45; cursor: not-allowed; }
+.frame-item small { color: #e4d1ff; font-size: 11px; }
+.frame-preview { width: 55px; height: 55px; display: flex; border-radius: 50%; }
+.frame-preview img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+/* Khung được trang bị: lớp viền phải nằm ngoài vùng cắt ảnh */
+.hm-avatar.avatar-frame-november {
+  overflow: visible !important; position: relative; border: 4px solid #ffdc53 !important;
+  box-shadow: 0 0 0 3px #ad4cff, 0 0 0 6px #f77eff, 0 0 20px 7px rgba(255,201,50,.85) !important;
+}
+.hm-avatar.avatar-frame-november img { border-radius: 50%; overflow: hidden; }
+.hm-avatar.avatar-frame-november::after {
+  content: '✦'; position: absolute; right: -9px; top: -14px; z-index: 3;
+  font-size: 25px; color: #ffe36b; text-shadow: 0 0 8px #ff9e00, 0 0 14px #f8f; pointer-events: none;
+}
+.pf-av-pic.avatar-frame-november { box-sizing: border-box; border: 5px solid #ffe56a !important; box-shadow: inset 0 0 12px #fff29c !important; }
+.pf-ring-november { border: 4px solid #ffe36b !important; box-shadow: 0 0 0 4px #b44aff, 0 0 22px 8px #f5a1ff !important; z-index: 5; }
+.frame-preview.avatar-frame-november { border: 4px solid #ffe36b !important; box-shadow: 0 0 0 2px #a34cff, 0 0 12px #f5a1ff !important; }
+
+/* Khung trang trí Tháng 11 hiện rõ bên ngoài avatar */
+.pf-av-ring.pf-ring-november, .hm-avatar.avatar-frame-november { overflow: visible !important; border: 5px solid #ffdb57 !important; box-shadow: 0 0 0 3px #7926e8, 0 0 0 7px #e75dff, 0 0 22px 9px rgba(255,190,40,.75), inset 0 0 12px #ffed9a !important; }
+.pf-av-ring.pf-ring-november::before, .hm-avatar.avatar-frame-november::before { content: '✦ ★ ✦'; position: absolute; top: -29px; left: 50%; transform: translateX(-50%); white-space: nowrap; color: #ffe866; font-size: 20px; font-weight: 900; text-shadow: 0 0 5px #ff7c00, 0 0 14px #f0f; z-index: 8; pointer-events: none; }
+.pf-av-ring.pf-ring-november::after, .hm-avatar.avatar-frame-november::after { content: '◆'; position: absolute; bottom: -17px; left: 50%; right: auto; top: auto; transform: translateX(-50%); color: #ffe45c; font-size: 23px; text-shadow: 0 0 7px #f80, 0 0 14px #f0f; z-index: 8; pointer-events: none; }
+.frame-preview.avatar-frame-november { position: relative; overflow: visible !important; }
+.frame-preview.avatar-frame-november::after { content: '★'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #ffe75e; font-size: 18px; text-shadow: 0 0 9px #f0f; pointer-events: none; }

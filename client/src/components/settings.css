@@ -1,0 +1,111 @@
+/* ===== Màn hình 15 – Cài đặt =====
+   Dùng lại .hm-root/.hm-stage (home.css), font + thanh trên (join.css), .wr-stage (waiting.css).
+   Toạ độ trong .sx-s là toạ độ ảnh mẫu 962x542 (canvas phóng 1.33056 lần). Không dùng ảnh thiết kế làm nền. */
+
+.sx-stage svg { display: block; }
+.sx-bg { position: absolute; inset: 0; }
+.sx-s { position: absolute; left: 0; top: 0; width: 962px; height: 542px; transform: scale(1.33056); transform-origin: 0 0; z-index: 3; }
+.sx-s > * { position: absolute; }
+.sx-s .wr-frame { position: absolute; left: 0; top: 0; }
+.sx-stage .hm-me { left: 224px; top: 10px; }
+.sx-stage .hm-currency { left: 530px; top: 14px; }
+.sx-logo { position: absolute; left: 18px; top: 10px; width: 180px; pointer-events: none; z-index: 6; filter: drop-shadow(0 0 10px rgba(80, 160, 255, .5)); }
+
+/* ----- menu trái ----- */
+.sx-stage .sx-nav { left: 13px; width: 143px; height: 39px; z-index: 5; color: #fff; text-align: left; cursor: pointer; transition: transform .12s, filter .12s; filter: drop-shadow(0 0 4px rgba(80, 150, 255, .7)); }
+.sx-stage .sx-nav:hover { transform: translateX(2px); filter: drop-shadow(0 0 5px rgba(100, 170, 255, .9)) brightness(1.2); }
+.sx-stage .sx-nav.on { filter: drop-shadow(0 0 5px rgba(255, 110, 235, .95)) drop-shadow(0 0 12px rgba(220, 90, 255, .6)); cursor: default; }
+.sx-stage .sx-nav.on:hover { transform: none; }
+.sx-nav-in { position: absolute; inset: 0; display: flex; align-items: center; gap: 14px; padding-left: 15px; }
+.sx-nav-in svg { flex: none; width: 24px; height: 24px; }
+.sx-nav-in b { font-size: 12.500px; font-weight: 600; letter-spacing: -.1px; white-space: nowrap; }
+.sx-stage .sx-nav.back .sx-nav-in { padding-left: 20px; gap: 13px; }
+
+/* ----- tiêu đề ----- */
+.sx-title { left: 381px; top: 56px; width: 269px; height: 47px; z-index: 6; filter: drop-shadow(0 0 5px rgba(120, 190, 255, .85)) drop-shadow(0 0 12px rgba(70, 120, 255, .5)); }
+.sx-title-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; }
+.sx-title-in b { display: flex; align-items: center; gap: 10px; font-size: 21px; line-height: 24px; font-weight: 700; letter-spacing: -.1px; text-shadow: 0 0 8px rgba(110, 160, 255, .7); }
+.sx-title-in b svg { filter: drop-shadow(0 0 5px rgba(150, 200, 255, .8)); }
+.sx-title-in em { font-size: 10px; line-height: 12px; font-weight: 500; color: #dfe6ff; }
+
+/* ----- khung ----- */
+.sx-panel { z-index: 3; color: #fff; filter: drop-shadow(0 0 4px rgba(90, 170, 255, .8)) drop-shadow(0 0 14px rgba(120, 90, 255, .45)); }
+.sx-panel > * { position: absolute; }
+.sx-panel > .wr-frame { position: absolute; }
+.sx-panel.tl { left: 170px; top: 113px; } .sx-panel.tr { left: 570px; top: 113px; }
+.sx-panel.bl { left: 170px; top: 314px; } .sx-panel.br { left: 570px; top: 314px; }
+.sx-head { left: 0; top: 0; right: 0; height: 44px; display: flex; align-items: center; gap: 12px; padding-left: 18px; color: #eef3ff; }
+.sx-head svg { flex: none; filter: drop-shadow(0 0 5px rgba(150, 200, 255, .8)); }
+.sx-head b { font-size: 13.500px; font-weight: 700; letter-spacing: -.1px; color: #fff; }
+.sx-panel.bl .sx-head, .sx-panel.br .sx-head { height: 41px; }
+.sx-line { left: 14px; right: 14px; top: 38px; height: 1px; background: linear-gradient(90deg, rgba(120, 170, 255, .1), rgba(130, 180, 255, .45) 20%, rgba(130, 180, 255, .45) 80%, rgba(120, 170, 255, .1)); }
+.sx-panel.bl .sx-line, .sx-panel.br .sx-line { top: 37px; }
+
+/* ----- dòng ----- */
+.sx-row { left: 0; right: 0; height: 30px; margin-top: -15px; }
+.sx-row > * { position: absolute; top: 50%; transform: translateY(-50%); }
+.sx-ico { left: 18px; display: grid; place-items: center; width: 26px; height: 26px; color: #e4edff; filter: drop-shadow(0 0 4px rgba(130, 180, 255, .6)); }
+.sx-ico svg { width: 22px; height: 22px; }
+.sx-label { left: 55px; font-size: 12px; font-weight: 500; letter-spacing: -.1px; white-space: nowrap; color: #f0f4ff; }
+.sx-panel.tr .sx-ico, .sx-panel.br .sx-ico { left: 17px; } .sx-panel.tr .sx-label, .sx-panel.br .sx-label { left: 53px; }
+
+/* thanh trượt */
+.sx-stage .sx-range { left: 171px; width: 166px; height: 16px; margin: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
+.sx-stage .sx-range::-webkit-slider-runnable-track { height: 5px; border-radius: 3px; background: linear-gradient(90deg, #38d8ff, #2f8cff) 0 0 / var(--v) 100% no-repeat, rgba(8, 14, 90, .85); box-shadow: 0 0 6px rgba(60, 200, 255, .55); }
+.sx-stage .sx-range::-moz-range-track { height: 5px; border-radius: 3px; background: rgba(8, 14, 90, .85); }
+.sx-stage .sx-range::-moz-range-progress { height: 5px; border-radius: 3px; background: linear-gradient(90deg, #38d8ff, #2f8cff); box-shadow: 0 0 6px rgba(60, 200, 255, .55); }
+.sx-stage .sx-range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -4.500px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 0 8px rgba(90, 210, 255, .95), 0 0 2px #fff; }
+.sx-stage .sx-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 0 8px rgba(90, 210, 255, .95); }
+.sx-stage .sx-range:focus-visible { outline: 2px solid #9fdcff; outline-offset: 3px; border-radius: 8px; }
+.sx-val { right: 19px; font-style: normal; font-size: 12px; font-weight: 500; color: #e8eeff; text-align: right; min-width: 36px; }
+
+/* chế độ chơi */
+.sx-modes { left: 170px; display: flex; gap: 12px; }
+.sx-stage .sx-modes button { height: 26px; display: flex; align-items: center; gap: 9px; padding: 0 13px 0 10px; border-radius: 13px; font-size: 12px; font-weight: 500; color: #cdd8ff; white-space: nowrap;
+  border: 1.200px solid rgba(110, 140, 255, .5); background: rgba(10, 16, 100, .6); transition: filter .12s; }
+.sx-stage .sx-modes button:hover { filter: brightness(1.25); }
+.sx-modes i { flex: none; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 1.400px solid rgba(190, 205, 255, .8); }
+.sx-stage .sx-modes button.on { color: #fff; font-weight: 600; border: 1.500px solid #ff8ef0; background: linear-gradient(180deg, rgba(100, 40, 220, .92), rgba(52, 20, 160, .92)); box-shadow: 0 0 9px rgba(255, 110, 235, .85), inset 0 0 8px rgba(230, 130, 255, .3); }
+.sx-modes button.on i { border-color: #fff; background: #fff; box-shadow: 0 0 6px #fff; }
+
+/* hộp chọn */
+.sx-select { left: 185px; width: 167px; height: 29px; position: absolute; display: block; }
+.sx-select select { width: 100%; height: 100%; box-sizing: border-box; padding: 0 30px 0 13px; border-radius: 8px; color: #fff; font-family: inherit; font-size: 12px; font-weight: 500; letter-spacing: -.1px; cursor: pointer; outline: 0;
+  -webkit-appearance: none; appearance: none; border: 1.400px solid rgba(110, 170, 255, .85); background: linear-gradient(180deg, rgba(16, 30, 150, .94), rgba(8, 14, 98, .96)); box-shadow: 0 0 7px rgba(70, 140, 255, .6), inset 0 0 8px rgba(70, 140, 255, .2); }
+.sx-select select:focus-visible { border-color: #a6dcff; box-shadow: 0 0 10px rgba(120, 200, 255, .9); }
+.sx-select select option { color: #fff; background: #0c1470; }
+.sx-select svg { position: absolute; right: 9px; top: 50%; margin-top: -8px; pointer-events: none; }
+
+/* công tắc */
+.sx-stage .sx-toggle { right: 21px; width: 42px; height: 23px; border-radius: 12px; position: absolute; border: 1.200px solid rgba(120, 150, 255, .6); background: rgba(10, 16, 100, .75); transition: background .18s, box-shadow .18s; }
+.sx-toggle i { position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: #c9d4ff; transition: left .18s, background .18s; box-shadow: 0 1px 3px rgba(0, 0, 40, .5); }
+.sx-stage .sx-toggle.on { border-color: #d6a0ff; background: linear-gradient(180deg, #a35cff, #7a3cf0); box-shadow: 0 0 9px rgba(180, 100, 255, .85); }
+.sx-toggle.on i { left: 21px; background: #fff; }
+.sx-stage .sx-toggle:focus-visible, .sx-stage .sx-btn:focus-visible, .sx-stage .sx-save:focus-visible, .sx-stage .sx-modes button:focus-visible { outline: 2px solid #9fdcff; outline-offset: 2px; }
+.sx-panel.bl .sx-toggle { right: 22px; }
+
+.sx-ver { right: 28px; font-style: normal; font-size: 11.500px; font-weight: 500; color: #e8eeff; }
+
+/* nút phụ */
+.sx-stage .sx-btn { position: absolute; display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 29px; padding: 0 12px 0 16px; border-radius: 9px; color: #fff; cursor: pointer;
+  border: 1.500px solid rgba(214, 150, 255, .95); background: linear-gradient(180deg, #4b2bbd, #2a1488); box-shadow: 0 0 9px rgba(190, 100, 255, .8), inset 0 0 10px rgba(200, 140, 255, .28); transition: transform .12s, filter .12s; }
+.sx-stage .sx-btn:hover { transform: translateY(-50%) translateY(-1px); filter: brightness(1.2); }
+.sx-btn b { font-size: 12px; font-weight: 600; letter-spacing: -.1px; white-space: nowrap; }
+.sx-btn.pw { left: 235px; width: 138px; height: 30px; }
+.sx-btn.sm { left: 229px; width: 118px; }
+
+/* lưu */
+.sx-stage .sx-save { left: 424px; top: 477px; width: 218px; height: 41px; z-index: 5; color: #fff; cursor: pointer; transition: transform .12s, filter .12s;
+  filter: drop-shadow(0 0 5px rgba(255, 120, 235, .9)) drop-shadow(0 0 14px rgba(190, 90, 255, .6)); }
+.sx-stage .sx-save:hover { transform: translateY(-1px); filter: drop-shadow(0 0 6px rgba(255, 140, 240, 1)) drop-shadow(0 0 16px rgba(190, 90, 255, .7)) brightness(1.15); }
+.sx-stage .sx-save:active { transform: scale(.98); }
+.sx-save-in { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.sx-save-in b { font-size: 17px; font-weight: 700; letter-spacing: -.1px; text-shadow: 0 0 8px rgba(255, 190, 255, .6); }
+
+@media (prefers-reduced-motion: reduce) { .sx-stage .hm-petal { display: none; } }
+
+/* tinh chỉnh khớp ảnh mẫu */
+.sx-panel.tl .sx-head, .sx-panel.bl .sx-head { gap: 9px; }
+.sx-panel.tr .sx-head, .sx-panel.br .sx-head { gap: 5px; }
+.sx-panel.bl .sx-label { left: 57px; }
+.sx-panel.br .sx-label { left: 57px; }

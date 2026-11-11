@@ -1,0 +1,315 @@
+import { GALLERY, photoOf } from '../lib/avatar.js'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Modal, useToast } from '../components/Layout.jsx'
+import { useApp } from '../store.jsx'
+import { AVATARS } from '../mock.js'
+import { Crown, Gem, Ico, PETALS, fmt, useFit } from '../components/hud.jsx'
+import { Backdrop, BigCrown, NeonFrame } from './WaitingRoom.jsx'
+import '../components/home.css'
+import '../components/join-fonts.css'
+import '../components/join.css'
+import '../components/waiting.css'
+import '../components/profile.css'
+import '../components/avatar-frames.css'
+
+/* Màn hình 12 – Hồ sơ cá nhân
+   Dựng hoàn toàn bằng code (SVG + CSS), không dùng ảnh thiết kế làm nền hay phủ lên.
+   Stage 1280x720 tự thu phóng; nội dung (.wr-s) theo toạ độ ảnh mẫu 951x535 (phóng 1.3459 lần),
+   cùng hệ toạ độ với màn Chờ đối thủ / Kết quả.
+   Số liệu thật: tên, level, exp, xu, kim cương từ user; thắng/hòa/thua/thành tích/phần thưởng tính từ lịch sử trận (matches).
+   Hạng hiển thị theo cấp độ, không phải thứ hạng máy chủ. */
+
+const REWARD = { win: [500, 20], draw: [100, 5], lose: [50, 0] }
+const tier = (lv) => (lv >= 15 ? ['Kim Cương I', 12] : lv >= 8 ? ['Vàng I', 35] : lv >= 4 ? ['Bạc I', 60] : ['Đồng I', 90])
+
+/* ---------- icon ---------- */
+const Book = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" />
+  </svg>
+)
+const Handshake = () => (
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.800" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.500 2.500a1 1 0 1 0 3-3l-3.880-3.880a3 3 0 0 0-4.240 0l-.88.880a1 1 0 1 1-3-3l2.810-2.810a5.790 5.790 0 0 1 7.060-.87l.47.280a2 2 0 0 0 1.420.250L21 4" />
+    <path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.500 6.500a1 1 0 1 0 3-3" /><path d="M3 4h8" />
+  </svg>
+)
+const Cross = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.600" strokeLinecap="round" aria-hidden><path d="M5 5l14 14M19 5L5 19" /></svg>
+)
+const Pencil = ({ s = 16 }) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.200" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M4 20l1-4L16.500 4.500a2 2 0 0 1 3 0 2 2 0 0 1 0 3L8 19zM14 7l3 3" />
+  </svg>
+)
+const Copy = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.400" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" /></svg>
+)
+const Star = ({ s = 22 }) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
+    <defs><linearGradient id="pfstar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffe785" /><stop offset="1" stopColor="#f0a010" /></linearGradient></defs>
+    <path d="M12 2l3 6.900 7.500.7-5.700 5 1.700 7.400L12 18l-6.500 4 1.700-7.400-5.700-5 7.500-.7z" fill="url(#pfstar)" stroke="#fff1b4" strokeWidth="1" strokeLinejoin="round" />
+  </svg>
+)
+const Gift = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <defs><linearGradient id="pfgift" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffb46a" /><stop offset="1" stopColor="#f07a1a" /></linearGradient></defs>
+    <rect x="3" y="9" width="18" height="12" rx="1.500" fill="url(#pfgift)" />
+    <rect x="2" y="6.500" width="20" height="4.500" rx="1.200" fill="#ffc27a" stroke="#fff1d0" strokeWidth=".8" />
+    <rect x="10.600" y="6.500" width="2.800" height="14.500" fill="#e0432e" />
+    <path d="M12 6.500C10 2.500 6 3 6.500 5.500 7 7 10 6.500 12 6.500zM12 6.500C14 2.500 18 3 17.500 5.500 17 7 14 6.500 12 6.500z" fill="#ff5a3c" stroke="#ffc27a" strokeWidth=".8" />
+  </svg>
+)
+const Coin = ({ s = 34 }) => (
+  <svg width={s} height={s} viewBox="0 0 30 30" aria-hidden>
+    <defs><radialGradient id="pfcoin" cx="35%" cy="30%" r="75%"><stop offset="0" stopColor="#fff1a0" /><stop offset=".55" stopColor="#ffc22e" /><stop offset="1" stopColor="#d98200" /></radialGradient></defs>
+    <circle cx="15" cy="15" r="13.500" fill="url(#pfcoin)" stroke="#fff0b0" strokeWidth="1.200" />
+    <circle cx="15" cy="15" r="10" fill="none" stroke="#c97a00" strokeOpacity=".7" strokeWidth="1" />
+    <path d="M15 8.500l1.900 4.100 4.400.5-3.300 3 .9 4.400L15 18.200l-3.900 2.300.9-4.400-3.300-3 4.400-.5z" fill="#fff6c8" stroke="#d98200" strokeWidth=".7" strokeLinejoin="round" />
+  </svg>
+)
+const Ticket = () => (
+  <svg width="36" height="30" viewBox="0 0 36 30" aria-hidden>
+    <defs><linearGradient id="pftk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffe27a" /><stop offset="1" stopColor="#e0900c" /></linearGradient></defs>
+    <g transform="rotate(-24 18 15)">
+      <path d="M4 7h28v5a3 3 0 0 0 0 6v5H4v-5a3 3 0 0 0 0-6z" fill="url(#pftk)" stroke="#fff1b4" strokeWidth="1.200" strokeLinejoin="round" />
+      <path d="M24 8v14" stroke="#b8700a" strokeWidth="1.200" strokeDasharray="2 2" />
+      <path d="M13.500 11l1.300 2.700 3 .4-2.200 2.100.5 3-2.600-1.400-2.700 1.400.6-3-2.200-2.100 3-.4z" fill="#fff6c8" />
+    </g>
+  </svg>
+)
+
+/* ---------- huy hiệu ---------- */
+function Medal({ kind, id }) {
+  const C = {
+    gold: ['#ffe27a', '#e0900c', '#7a4a00'],
+    blue: ['#bfe0ff', '#3f6fe0', '#143a8a'],
+    violet: ['#e2c4ff', '#8a4be0', '#4a1a8a'],
+  }[kind]
+  const shield = 'M28 4 L50 12 V29 C50 41 40 50 28 55 C16 50 6 41 6 29 V12z'
+  return (
+    <svg width="58" height="58" viewBox="0 0 56 58" aria-hidden style={{ filter: `drop-shadow(0 0 5px ${kind === 'gold' ? 'rgba(255,190,50,.8)' : kind === 'blue' ? 'rgba(90,160,255,.85)' : 'rgba(190,110,255,.85)'})` }}>
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={C[0]} /><stop offset="1" stopColor={C[1]} /></linearGradient>
+      </defs>
+      {kind === 'gold' && <path d="M6 20C0 18-1 30 6 38M50 20c6-2 7 10 0 18" fill="none" stroke="#ffd45a" strokeWidth="3.200" strokeLinecap="round" />}
+      <path d={shield} fill={`url(#${id})`} stroke="#fff6d0" strokeWidth="1.400" strokeLinejoin="round" />
+      <path d="M28 9 L45 15 V29 C45 38 38 45 28 49 C18 45 11 38 11 29 V15z" fill={C[2]} fillOpacity=".55" stroke="#fff" strokeOpacity=".5" strokeWidth=".8" />
+      {kind === 'gold' && <path d="M17 33l-1.500-11 7 5.500L28 17l5 9.500 7-5.500-1.500 12z" fill="#ffd45a" stroke="#fff1b4" strokeWidth="1" strokeLinejoin="round" />}
+      {kind === 'blue' && <path d="M28 15l3.600 8.200 8.900.9-6.700 6 2 8.800L28 34l-7.800 4.900 2-8.800-6.700-6 8.900-.9z" fill="#dff0ff" stroke="#fff" strokeWidth=".8" strokeLinejoin="round" />}
+      {kind === 'violet' && <><circle cx="28" cy="29" r="11" fill="none" stroke="#f2e0ff" strokeWidth="2" /><path d="M28 21.500l2.300 5.200 5.600.5-4.200 3.800 1.300 5.500L28 33.700l-5 2.800 1.300-5.500-4.200-3.800 5.600-.5z" fill="#fff" /></>}
+    </svg>
+  )
+}
+
+/* ---------- huy hiệu hạng lớn (khiên + cánh + vương miện) ---------- */
+function RankBadge() {
+  const wing = (s) => (
+    <g transform={`translate(${s > 0 ? 82 : 68} 66) scale(${s} 1)`}>
+      {[[-62, 36, 6], [-46, 52, 7], [-30, 62, 7.500], [-14, 64, 7.500], [2, 58, 7], [16, 46, 6]].map(([a, len, w], i) => (
+        <path key={i} transform={`rotate(${a})`} d={`M0 0 C ${len * .25} ${-w} ${len * .8} ${-w * .8} ${len} 0 C ${len * .8} ${w * .5} ${len * .3} ${w * .6} 0 0z`} fill="url(#pfrw)" stroke="#fff3c0" strokeOpacity=".8" strokeWidth=".7" />
+      ))}
+    </g>
+  )
+  return (
+    <svg width="150" height="116" viewBox="0 0 150 116" aria-hidden style={{ filter: 'drop-shadow(0 0 7px rgba(255,190,60,.6))' }}>
+      <defs>
+        <linearGradient id="pfrw" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stopColor="#e6900c" /><stop offset=".55" stopColor="#ffd75a" /><stop offset="1" stopColor="#fffbe0" /></linearGradient>
+        <linearGradient id="pfrs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8a52f0" /><stop offset="1" stopColor="#3a1aa0" /></linearGradient>
+        <linearGradient id="pfrg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff0a0" /><stop offset=".55" stopColor="#ffc22e" /><stop offset="1" stopColor="#d98200" /></linearGradient>
+      </defs>
+      {wing(1)}{wing(-1)}
+      <path d="M75 22 L108 34 V62 C108 80 94 92 75 100 C56 92 42 80 42 62 V34z" fill="url(#pfrg)" stroke="#fff3c0" strokeWidth="1.600" strokeLinejoin="round" />
+      <path d="M75 29 L102 39 V62 C102 76 91 86 75 93 C59 86 48 76 48 62 V39z" fill="url(#pfrs)" stroke="#ffe48a" strokeWidth="1.200" strokeLinejoin="round" />
+      <path d="M75 46l5.600 12.600 13.600 1.400-10.200 9.200 3 13.400L75 75.600 63 82.600l3-13.400L55.800 60l13.600-1.400z" fill="url(#pfrg)" stroke="#fff3c0" strokeWidth="1" strokeLinejoin="round" />
+      <g transform="translate(55 4) scale(1.100)">
+        <path d="M3 24L1.500 7.500l9 7L18 2l7.500 12.500 9-7L33 24z" fill="url(#pfrg)" stroke="#fff1b4" strokeWidth="1.200" strokeLinejoin="round" />
+        <rect x="3" y="21.500" width="30" height="4.500" rx="1.500" fill="#f2a313" stroke="#fff1b4" strokeWidth=".9" />
+        <g fill="#fff6c9" stroke="#ffb02a" strokeWidth=".8"><circle cx="1.800" cy="6.500" r="2.200" /><circle cx="18" cy="2.300" r="2.400" /><circle cx="34.200" cy="6.500" r="2.200" /></g>
+      </g>
+    </svg>
+  )
+}
+
+export const NAV = [
+  { k: 'back', label: 'Quay lại', icon: <Ico n="chevL" size={24} sw={3} />, to: '/home' },
+  { k: 'profile', label: 'Hồ sơ cá nhân', icon: <Ico n="user" size={24} fill="currentColor" sw={1.500} />, to: '/profile' },
+  { k: 'history', label: 'Lịch sử đấu', icon: <Ico n="trophy" size={24} />, to: '/history' },
+  { k: 'rank', label: 'Bảng xếp hạng', icon: <Ico n="podium" size={24} />, to: '/leaderboard' },
+  { k: 'settings', label: 'Cài đặt', icon: <Ico n="gear" size={24} />, to: '/settings' },
+  { k: 'help', label: 'Hướng dẫn chơi', icon: <Book />, to: '/how-to-play' },
+]
+
+export default function ProfileScreen() {
+  const { user, matches, updateProfile, logout } = useApp()
+  const nav = useNavigate()
+  const scale = useFit(1280, 720)
+  const [toast, setToast] = useToast()
+  const [edit, setEdit] = useState(false)
+  const [name, setName] = useState(user?.name || '')
+  const [avatar, setAvatar] = useState(user?.avatar || '👧')
+  const [frame, setFrame] = useState(user?.activeFrame || 'none')
+  if (!user) return null
+
+  const total = matches.length
+  const w = matches.filter((m) => m.result === 'win').length
+  const d = matches.filter((m) => m.result === 'draw').length
+  const l = matches.filter((m) => m.result === 'lose').length
+  const pct = (n) => (total ? ((n / total) * 100).toFixed(1) : '0.0') + '%'
+  const best = (() => { let run = 0, max = 0; for (const m of [...matches].reverse()) { run = m.result === 'win' ? run + 1 : 0; max = Math.max(max, run) } return max })()
+  const quick = matches.filter((m) => m.result === 'win' && (m.moves?.length || 99) <= 30).length
+  const coins = matches.reduce((a, m) => a + (REWARD[m.result]?.[0] || 0), 0)
+  const gems = matches.reduce((a, m) => a + (REWARD[m.result]?.[1] || 0), 0)
+  const [rank, top] = tier(user.level)
+  const xp = Math.min(100, Math.round((user.exp / user.expMax) * 100))
+  const photo = photoOf(user.avatar)
+  const soon = (n) => () => setToast(`${n}: tính năng sẽ bổ sung sau`)
+  const doLogout = () => { logout(); nav('/login') }
+  const openEdit = () => { setName(user.name); setAvatar(user.avatar); setFrame(user.activeFrame || 'none'); setEdit(true) }
+  const copyId = () => { navigator.clipboard?.writeText(user.id); setToast('Đã sao chép ID') }
+
+  return (
+    <div className="hm-root">
+      <div className="hm-stage jr-stage wr-stage pf-stage" style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
+        <div className="pf-bg"><Backdrop /></div>
+        {PETALS.slice(0, 12).map((p, i) => (
+          <i key={i} className="hm-petal" style={{ left: p.x + '%', animationDuration: p.d + 's', animationDelay: p.delay + 's', transform: `scale(${p.s})` }} />
+        ))}
+
+        <div className="wr-s">
+          {/* ===== tiêu đề ===== */}
+          <div className="pf-box pf-title">
+            <NeonFrame w={325} h={45} c={20} id="pft" c1="#e8f4ff" c2="#6aa8ff" fill={['rgba(8,12,96,.9)', 'rgba(4,8,70,.94)']} inset={4} sw={1.600} />
+            <span className="pf-title-in"><Ico n="user" size={26} fill="#fff" sw={1.400} /><b>Hồ sơ cá nhân</b></span>
+          </div>
+
+          {/* ===== menu trái ===== */}
+          {NAV.map((n, i) => (
+            <button key={n.k} type="button" className={`pf-nav ${n.k === 'profile' ? 'on' : ''}`} style={{ top: 100 + i * 48 - (i > 1 ? 4 : 0) }}
+              onClick={n.to && n.k !== 'profile' ? () => nav(n.to) : undefined}>
+              {n.icon}<b>{n.label}</b>
+            </button>
+          ))}
+
+          {/* ===== khung chính ===== */}
+          <div className="pf-box pf-main"><NeonFrame w={672} h={402} c={22} id="pfm" c1="#6fc4ff" c2="#8a6bff" fill={['rgba(10,22,128,.46)', 'rgba(8,12,100,.62)']} inset={6} sw={2.200} /></div>
+
+          {/* avatar */}
+          <div className="pf-av">
+            <span className="pf-av-glow" />
+            <div className={`pf-av-pic avatar-frame-${user.activeFrame || 'none'}`}>{photo ? <img src={photo} alt="" draggable={false} /> : <b className="emoji">{user.avatar}</b>}</div>
+            <span className={`pf-av-ring ${user.activeFrame === 'november' ? 'pf-ring-november' : ''}`} />
+          </div>
+          <span className="pf-crown"><BigCrown /></span>
+
+          {/* tên / id / level / trạng thái */}
+          <div className="pf-name"><span>{user.name}</span>
+            <button type="button" className="pf-sq" onClick={openEdit} aria-label="Sửa tên"><Pencil s={15} /></button>
+          </div>
+          <div className="pf-id"><span>ID: {user.id}</span>
+            <button type="button" className="pf-copy" onClick={copyId} aria-label="Sao chép ID"><Copy /></button>
+          </div>
+          <div className="pf-lv">
+            <i style={{ width: `calc(${xp}% + 0px)`, minWidth: 100 }} />
+            <span className="pf-lv-crown"><Crown w={26} h={20} /></span>
+            <b>Lv.{user.level}</b>
+            <em>{fmt(user.exp)} / {fmt(user.expMax)}</em>
+          </div>
+          <div className="pf-online"><i />Trực tuyến</div>
+
+          {/* hạng */}
+          <div className="pf-rank">
+            <RankBadge />
+            <b>{rank}</b>
+            <span>(Theo cấp độ)</span>
+          </div>
+
+          {/* thống kê */}
+          <div className="pf-box pf-stats">
+            <NeonFrame w={643} h={90} c={14} id="pfs" c1="#6fc4ff" c2="#6a7cff" fill={['rgba(10,22,128,.4)', 'rgba(8,12,100,.55)']} inset={4} sw={1.600} />
+            <div className="pf-stats-in">
+              <div><span className="ic cyan"><Ico n="swords" size={30} sw={2} /></span><label>Tổng trận</label><b>{total}</b></div>
+              <div><span className="ic gold"><Ico n="trophy" size={30} fill="currentColor" sw={1.400} /></span><label className="gold">Thắng</label><b>{w}</b><u className="g">{pct(w)}</u></div>
+              <div><span className="ic white"><Handshake /></span><label>Hòa</label><b>{d}</b><u className="y">{pct(d)}</u></div>
+              <div><span className="ic pink"><Cross /></span><label>Thua</label><b>{l}</b><u className="p">{pct(l)}</u></div>
+            </div>
+          </div>
+
+          {/* thành tích */}
+          <div className="pf-box pf-ach">
+            <NeonFrame w={312} h={106} c={12} id="pfa" c1="#7a8cff" c2="#5a4cf0" fill={['rgba(14,18,120,.45)', 'rgba(10,10,96,.6)']} inset={4} sw={1.400} />
+            <div className="pf-h"><Star /><b>Thành tích nổi bật</b></div>
+            <div className="pf-medals">
+              <div><Medal kind="gold" id="pfm1" /><label className="gold">Chiến thần</label><b>x{w}</b></div>
+              <div><Medal kind="blue" id="pfm2" /><label>Bậc thầy Caro</label><b>x{quick}</b></div>
+              <div><Medal kind="violet" id="pfm3" /><label>Chuỗi thắng</label><b>x{best}</b></div>
+            </div>
+          </div>
+
+          {/* phần thưởng đã nhận */}
+          <div className="pf-box pf-rew">
+            <NeonFrame w={313} h={100} c={12} id="pfr" c1="#7a8cff" c2="#5a4cf0" fill={['rgba(14,18,120,.45)', 'rgba(10,10,96,.6)']} inset={4} sw={1.400} />
+            <div className="pf-h"><Gift /><b>Phần thưởng đã nhận</b></div>
+            <div className="pf-rew-in">
+              <div className="gold"><Coin /><b>+{fmt(coins)}</b></div>
+              <div className="cyan"><span className="gem"><Gem /></span><b>+{fmt(gems)}</b></div>
+              <div className="gold"><Ticket /><b>+{w}</b></div>
+            </div>
+          </div>
+
+          <button type="button" className="pf-edit" onClick={openEdit}><Pencil s={19} /><b>Chỉnh sửa hồ sơ</b></button>
+        </div>
+
+        {/* ===== thanh trên: xu / kim cương / nút tròn + logo ===== */}
+        <div className="hm-currency">
+          <div className="hm-chip"><span className="hm-coin">$</span><b>{fmt(user.coins)}</b>
+            <button className="hm-plus" onClick={soon('Nạp xu')} aria-label="Nạp xu"><Ico n="plus" size={16} sw={3} /></button></div>
+          <div className="hm-chip"><Gem /><b>{fmt(user.gems)}</b>
+            <button className="hm-plus" onClick={soon('Nạp kim cương')} aria-label="Nạp kim cương"><Ico n="plus" size={16} sw={3} /></button></div>
+        </div>
+        <div className="hm-icons">
+          <button className="hm-round" onClick={() => nav('/settings')} aria-label="Cài đặt"><Ico n="gear" size={24} /></button>
+          <button className="hm-round" onClick={doLogout} aria-label="Đăng xuất"><Ico n="power" size={24} /></button>
+        </div>
+        <img className="pf-logo" src="/img/join-logo.png" alt="X-O Arena" draggable={false} />
+      </div>
+
+      {edit && (
+        <Modal onClose={() => setEdit(false)}>
+          <div className="panel-title">✎ Chỉnh sửa hồ sơ</div>
+          <span className="label">Tên hiển thị</span>
+          <div className="field"><input value={name} onChange={(e) => setName(e.target.value)} maxLength={20} /></div>
+          <span className="label">Ảnh đại diện</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, maxHeight: 280, overflowY: 'auto', marginBottom: 14, padding: 2 }}>
+            {[...(user.main && user.name === 'Nguyễn Duyên' ? ['👧'] : []), 'duo', ...GALLERY].map((a) => (
+              <button key={a} type="button" onClick={() => setAvatar(a)} aria-label="Chọn ảnh đại diện"
+                style={{ padding: 0, border: avatar === a ? '3px solid #ffd54a' : '3px solid transparent', borderRadius: 12, background: 'none', cursor: 'pointer', overflow: 'hidden', aspectRatio: '1', boxShadow: avatar === a ? '0 0 10px #ffd54a' : 'none' }}>
+                <img src={photoOf(a)} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              </button>
+            ))}
+          </div>
+          <span className="label">Khung avatar · Kho đồ của tôi</span>
+          <div className="frame-inventory">
+            {[{ id: 'none', label: 'Không dùng khung' }, { id: 'november', label: 'Khung Vinh Quang Tháng 11' }].map(item => {
+              const owned = item.id === 'none' || (user.frames || []).includes(item.id)
+              return <button type="button" key={item.id} disabled={!owned} className={`frame-item ${frame === item.id ? 'selected' : ''}`} onClick={() => setFrame(item.id)}>
+                <span className={`frame-preview avatar-frame-${item.id}`}><img src={photoOf(avatar) || '/img/avatar.png'} alt="" /></span>
+                <b>{item.label}</b><small>{owned ? frame === item.id ? 'Đang chọn' : 'Đã sở hữu' : 'Chưa mở khóa · 2.000 điểm sự kiện'}</small>
+              </button>
+            })}
+          </div>
+          <div className="row" style={{ justifyContent: 'flex-end' }}>
+            <button className="btn" onClick={() => setEdit(false)}>Hủy</button>
+            <button className="btn primary" onClick={() => {
+              if (!name.trim()) return
+              updateProfile({ name: name.trim(), avatar, activeFrame: frame }); setEdit(false); setToast(frame === 'november' ? 'Đã trang bị Khung Vinh Quang Tháng 11' : 'Đã lưu hồ sơ')
+            }}>Lưu</button>
+          </div>
+        </Modal>
+      )}
+      {toast}
+    </div>
+  )
+}
+

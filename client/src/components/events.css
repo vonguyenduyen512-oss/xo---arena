@@ -1,0 +1,251 @@
+/* ===== Màn hình Sự kiện Hot =====
+   Dùng lại .hm-root/.hm-stage (home.css) + thanh trên TopHud.
+   Toạ độ trong .ev-s là toạ độ ảnh mẫu 939x528 (canvas phóng 1280/939 = 1.36315 lần). */
+
+.ev-stage { font-family: 'Baloo 2', 'Inter Tight', 'Inter', system-ui, sans-serif; }
+.ev-stage svg { display: block; }
+.ev-stage button { font-family: inherit; }
+
+/* ----- nền ----- */
+.ev-bg { position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 26% 34% at 26% 14%, rgba(130, 90, 255, .5), transparent 70%),
+    radial-gradient(ellipse 24% 36% at 86% 18%, rgba(255, 80, 205, .55), transparent 72%),
+    radial-gradient(ellipse 36% 26% at 50% 0%, rgba(150, 60, 235, .42), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120, 40, 190, .5), transparent 75%),
+    linear-gradient(180deg, #2b0a7c 0%, #27086f 38%, #320a80 100%); }
+.ev-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(14, 2, 60, .55) 100%); }
+.ev-bokeh { position: absolute; inset: 0; opacity: .6;
+  background:
+    radial-gradient(circle 4px at 9% 20%, rgba(255, 200, 240, .9), transparent 70%),
+    radial-gradient(circle 3px at 20% 8%, rgba(160, 200, 255, .9), transparent 70%),
+    radial-gradient(circle 5px at 42% 14%, rgba(255, 190, 255, .8), transparent 70%),
+    radial-gradient(circle 3px at 64% 10%, rgba(255, 220, 170, .8), transparent 70%),
+    radial-gradient(circle 4px at 90% 26%, rgba(170, 210, 255, .8), transparent 70%); }
+
+/* ----- lớp toạ độ ảnh mẫu ----- */
+.ev-s { position: absolute; left: 0; top: 0; width: 939px; height: 528px; transform: scale(1.36315); transform-origin: 0 0; z-index: 3; }
+.ev-s > * { position: absolute; }
+.ev-s button { cursor: pointer; border: 0; background: none; padding: 0; color: inherit; }
+.ev-s em { font-style: normal; }
+
+/* ----- nhân vật + trang trí ----- */
+.ev-char { pointer-events: none; z-index: 1; filter: drop-shadow(0 0 18px rgba(120, 130, 255, .5)); animation: ev-float 6s ease-in-out infinite; }
+.ev-char.boy { left: 148px; top: 18px; width: 205px; }
+.ev-char.girl { left: 712px; top: -12px; width: 236px; animation-delay: -2s; }
+@keyframes ev-float { 50% { translate: 0 -4px; } }
+.ev-deco { z-index: 1; pointer-events: none; }
+.ev-deco.x { left: 318px; top: 128px; filter: drop-shadow(0 0 7px rgba(90, 160, 255, .85)); }
+.ev-deco.o1 { left: 677px; top: 122px; transform: rotate(-12deg); filter: drop-shadow(0 0 8px rgba(255, 80, 220, .85)); }
+.ev-deco.o2 { left: 886px; top: 72px; transform: rotate(20deg) scaleY(.8); filter: drop-shadow(0 0 7px rgba(110, 150, 255, .85)); }
+.ev-spark { position: absolute; z-index: 1; pointer-events: none; filter: drop-shadow(0 0 4px currentColor); animation: ev-tw 2.8s ease-in-out infinite; }
+@keyframes ev-tw { 50% { opacity: .35; scale: .7; } }
+
+/* ----- tiêu đề ----- */
+.ev-title { left: 358px; top: 66px; width: 335px; height: 64px; z-index: 4; }
+.ev-title > * { position: absolute; }
+.ev-laurel { filter: drop-shadow(0 0 5px rgba(255, 190, 60, .7)); }
+.ev-title .ev-laurel { opacity: .75; filter: drop-shadow(0 0 5px rgba(200, 180, 255, .8)); }
+.ev-title .ev-laurel.l { left: -2px; top: 1px; }
+.ev-title .ev-laurel.r { right: -2px; top: 1px; transform: scaleX(-1); }
+.ev-title-pill { left: 22px; top: 8px; width: 294px; height: 54px; box-sizing: border-box; border-radius: 15px;
+  background: linear-gradient(180deg, rgba(110, 60, 210, .88), rgba(62, 26, 150, .92));
+  border: 1.5px solid rgba(196, 170, 255, .85);
+  box-shadow: 0 0 16px rgba(160, 110, 255, .65), inset 0 0 18px rgba(190, 140, 255, .3); }
+.ev-title-pill b { position: absolute; left: 82px; top: 0; height: 100%; display: flex; align-items: center; font-size: 29px; font-style: italic; font-weight: 800; letter-spacing: -.2px; white-space: nowrap; color: #fff;
+  text-shadow: 0 0 12px rgba(150, 120, 255, .9), 0 2px 0 rgba(40, 10, 120, .7); }
+.ev-title-gift { position: absolute; left: 8px; top: -8px; display: block; filter: drop-shadow(0 0 8px rgba(255, 160, 60, .7)); }
+
+/* ----- menu trái ----- */
+.ev-nav { left: 10px; top: 79px; width: 135px; height: 255px; z-index: 5; border-radius: 15px;
+  background: linear-gradient(180deg, rgba(48, 16, 128, .88), rgba(36, 10, 100, .92));
+  border: 1px solid rgba(150, 110, 255, .5);
+  box-shadow: 0 0 16px rgba(110, 70, 230, .5), inset 0 0 16px rgba(120, 80, 255, .18); }
+.ev-nav-i { position: absolute !important; left: 4px; width: 125px; height: 40px; display: flex; align-items: center; gap: 12px; padding: 0 11px !important; border-radius: 11px; text-align: left; font-size: 11px; font-weight: 700; white-space: nowrap; color: #fff;
+  border: 1.5px solid transparent !important; transition: background .15s, transform .12s; }
+.ev-nav-i:hover { background: rgba(130, 100, 255, .22); transform: translateX(2px); }
+.ev-nav-i.on { background: linear-gradient(90deg, rgba(120, 60, 235, .75), rgba(70, 30, 190, .75)) !important; border-color: rgba(214, 196, 255, .95) !important;
+  box-shadow: 0 0 12px rgba(190, 150, 255, .8), inset 0 0 10px rgba(255, 255, 255, .15); }
+.ev-nav-i.on:hover { transform: none; }
+.ev-nav-i svg { flex: none; filter: drop-shadow(0 0 5px currentColor); }
+.ev-nav-i .c-home, .ev-nav-i.c-home svg { color: #fff; }
+.ev-nav-i.c-trophy svg { color: #62c4ff; } .ev-nav-i.c-doc svg { color: #b8c4ff; } .ev-nav-i.c-podium svg { color: #5aa8ff; }
+.ev-nav-i.c-gear svg { color: #c9a8ff; } .ev-nav-i.c-book svg { color: #ff8fd8; }
+
+/* ----- khung lớn ----- */
+.ev-main { left: 155px; top: 170px; width: 780px; height: 336px; z-index: 3; border-radius: 13px;
+  background: linear-gradient(180deg, rgba(58, 16, 140, .96), rgba(40, 8, 112, .97));
+  border: 1.5px solid rgba(170, 140, 255, .45);
+  box-shadow: 0 0 22px rgba(120, 70, 240, .5), inset 0 0 26px rgba(140, 90, 255, .15); }
+.ev-main > * { position: absolute; }
+
+/* cột tab */
+.ev-tabs { left: 0; top: 0; width: 150px; height: 100%; border-radius: 13px 0 0 13px; background: linear-gradient(180deg, rgba(34, 8, 96, .78), rgba(30, 6, 88, .82)); border-right: 1px solid rgba(140, 110, 255, .4); }
+.ev-tab { position: absolute !important; left: 3px; width: 140px; height: 56px; display: flex; align-items: center; gap: 9px; padding: 0 0 0 15px !important; text-align: left; font-size: 11.500px; font-weight: 700; color: #eef0ff; white-space: nowrap;
+  border: 2px solid transparent !important; border-radius: 12px; transition: background .15s, filter .12s; }
+.ev-tab svg { flex: none; }
+.ev-tab:not(.on) { font-weight: 600; }
+.ev-tab:not(.on) svg { color: #8fa4ff; filter: drop-shadow(0 0 5px rgba(120, 150, 255, .85)); }
+.ev-tab:hover:not(.on) { background: rgba(130, 110, 255, .16); }
+.ev-tab.on { background: linear-gradient(135deg, #b53bff 0%, #7a22ec 55%, #6a1ad8 100%) !important; border-color: rgba(236, 222, 255, .95) !important; cursor: default;
+  box-shadow: 0 0 14px rgba(190, 110, 255, .85), inset 0 0 14px rgba(255, 255, 255, .22); }
+.ev-tab.on svg { filter: drop-shadow(0 0 6px rgba(255, 190, 80, .8)); }
+.ev-tab-hr { position: absolute; left: 14px; right: 14px; height: 1px; background: linear-gradient(90deg, transparent, rgba(150, 120, 255, .45) 20%, rgba(150, 120, 255, .45) 80%, transparent); }
+.ev-tabs > div { position: static; }
+.ev-tabs > div:nth-child(3) .ev-tab, .ev-tabs > div:nth-child(2) .ev-tab { color: #e7ebff; }
+.ev-tabs > div:nth-child(4) .ev-tab svg { color: #c9b0ff; filter: drop-shadow(0 0 5px rgba(190, 150, 255, .85)); }
+.ev-tabs > div:nth-child(3) .ev-tab svg { color: #cfb8ff; }
+.ev-tabs > div:nth-child(2) .ev-tab svg { color: #7f9bff; }
+
+/* thẻ sự kiện */
+.ev-card { left: 155px; top: 13px; width: 240px; height: 307px; box-sizing: border-box; overflow: hidden; border-radius: 14px;
+  background:
+    radial-gradient(ellipse 60% 30% at 50% 82%, rgba(255, 110, 230, .55), transparent 75%),
+    linear-gradient(180deg, #5a1fb8 0%, #6a28cc 34%, #7d34dc 62%, #5a1cae 100%);
+  border: 1.5px solid rgba(190, 160, 255, .9);
+  box-shadow: 0 0 16px rgba(170, 120, 255, .7), inset 0 0 22px rgba(200, 150, 255, .25); }
+.ev-card > * { position: absolute; }
+.ev-card-rays { left: 0; top: 0; width: 100%; height: 100%;
+  background: repeating-conic-gradient(from 0deg at 50% 60%, rgba(255, 190, 250, .2) 0 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(ellipse 55% 46% at 50% 60%, #000 20%, transparent 100%); mask-image: radial-gradient(ellipse 55% 46% at 50% 60%, #000 20%, transparent 100%); }
+.ev-card-glow { left: 50%; top: 66px; width: 200px; height: 180px; margin-left: -100px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 255, .85), rgba(255, 120, 235, .45) 40%, transparent 72%); filter: blur(10px); }
+.ev-pill-ev { left: 13px; top: 14px; padding: 0 13px; height: 19px; display: flex; align-items: center; border-radius: 10px; font-size: 11px; font-weight: 800; color: #fff;
+  background: linear-gradient(90deg, #e438e6, #a722e2); box-shadow: 0 0 10px rgba(230, 70, 230, .7); }
+.ev-crown { left: 150px; top: 8px; filter: drop-shadow(0 0 8px rgba(255, 200, 60, .85)); transform: rotate(8deg); }
+.ev-h2 { left: 0; right: 0; top: 40px; margin: 0; display: flex; flex-direction: column; align-items: center; font-size: 31px; line-height: 32px; font-style: italic; font-weight: 800; letter-spacing: -.3px; text-align: center;
+  filter: drop-shadow(0 2px 0 #b64a0a) drop-shadow(0 0 9px rgba(255, 160, 50, .75)); }
+.ev-h2 span { display: block; background: linear-gradient(180deg, #ffffff 10%, #fff0b8 55%, #ffd36a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 4px; }
+.ev-card .ev-laurel.l { left: 11px; top: 62px; }
+.ev-card .ev-laurel.r { right: 11px; top: 58px; transform: scaleX(-1); }
+.ev-shard { left: 14px; top: 156px; }
+.ev-podium { left: 57px; top: 207px; filter: drop-shadow(0 0 9px rgba(190, 130, 255, .8)); }
+.ev-trophy { left: 52px; top: 108px; filter: drop-shadow(0 0 14px rgba(255, 190, 70, .9)) drop-shadow(0 0 28px rgba(255, 150, 230, .55)); animation: ev-pulse 3.2s ease-in-out infinite; }
+@keyframes ev-pulse { 50% { filter: drop-shadow(0 0 20px rgba(255, 210, 90, 1)) drop-shadow(0 0 34px rgba(255, 150, 230, .75)); } }
+.ev-box.l { left: 8px; top: 187px; } .ev-box.r { left: 158px; top: 183px; }
+.ev-box { filter: drop-shadow(0 4px 6px rgba(20, 0, 70, .5)); }
+.ev-gem.a { left: 50px; top: 227px; filter: drop-shadow(0 0 8px rgba(80, 200, 255, .9)); }
+.ev-gem.b { left: 170px; top: 230px; filter: drop-shadow(0 0 7px rgba(170, 120, 255, .9)); }
+.ev-time { left: 25px; top: 272px; width: 192px; height: 26px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 14px;
+  background: linear-gradient(180deg, rgba(78, 28, 150, .85), rgba(52, 16, 110, .9)); border: 1.5px solid rgba(190, 160, 255, .85); box-shadow: 0 0 9px rgba(170, 120, 255, .55); }
+.ev-time b { font-size: 11.500px; font-weight: 700; color: #fff; white-space: nowrap; }
+.ev-time svg { flex: none; }
+
+/* cột phải */
+.ev-intro { left: 415px; top: 12px; margin: 0; font-size: 12.500px; line-height: 16px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(20, 0, 70, .7); }
+.ev-intro em { color: #ffe14a; text-shadow: 0 0 8px rgba(255, 210, 60, .45); }
+
+.ev-missions { left: 407px; top: 59px; width: 358px; height: 120px; }
+.ev-missions > * { position: absolute; }
+.ev-row { left: 0; width: 358px; height: 38px; box-sizing: border-box; border-radius: 9px;
+  background: linear-gradient(90deg, rgba(70, 24, 160, .62), rgba(46, 12, 120, .66)); border: 1px solid rgba(140, 105, 255, .38); box-shadow: inset 0 0 14px rgba(120, 80, 240, .18); }
+.ev-row > * { position: absolute; }
+.ev-row-ico { left: 9px; top: 5px; width: 28px; height: 28px; display: grid; place-items: center; filter: drop-shadow(0 0 5px rgba(170, 190, 255, .6)); }
+.ev-row-t { left: 48px; top: 2px; font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; }
+.ev-bar { left: 48px; top: 20px; width: 100px; height: 6px; border-radius: 3px; background: rgba(110, 76, 150, .85); overflow: hidden; }
+.ev-bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(180deg, #fff2a0, #ffd93a); box-shadow: 0 0 6px rgba(255, 215, 70, .75); }
+.ev-cnt { left: 157px; top: 13px; font-size: 10.500px; font-weight: 600; color: #fff; white-space: nowrap; }
+.ev-rw { left: 216px; top: -1px; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 9px; box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(50, 18, 130, .95), rgba(34, 8, 96, .95)); border: 1.2px solid rgba(160, 120, 255, .75); box-shadow: 0 0 8px rgba(150, 100, 255, .4), inset 0 0 8px rgba(120, 80, 240, .35); }
+.ev-rw-n { left: 257px; top: 19px; font-size: 10px; font-weight: 600; color: #fff; }
+.ev-claim { left: 294px; top: 6px; width: 57px; height: 25px; border-radius: 13px !important; font-size: 12px; font-weight: 800; color: #5a3000 !important; position: absolute;
+  background: linear-gradient(180deg, #fff17a, #ffc61a 55%, #f2a500) !important; border: 1px solid #ffe88a !important; box-shadow: 0 2px 0 #b97300, 0 0 8px rgba(255, 205, 50, .55); transition: transform .12s, filter .12s; }
+.ev-claim:not(:disabled):hover { transform: translateY(-1px); filter: brightness(1.1); }
+.ev-claim:not(:disabled):active { transform: translateY(1px); box-shadow: 0 0 0 #b97300; }
+.ev-claim em { position: absolute; right: -6px; top: -6px; width: 14px; height: 14px; display: grid; place-items: center; border-radius: 50%; font-size: 9px; font-weight: 900; color: #fff; background: #ff3a55; border: 1.2px solid #fff; box-shadow: 0 0 7px #ff3a55; }
+.ev-claim:disabled { cursor: default !important; }
+.ev-claim.done { filter: grayscale(.85) brightness(.75); box-shadow: none; }
+
+/* mốc tích lũy */
+.ev-mile { left: 407px; top: 193px; width: 358px; height: 121px; box-sizing: border-box; border-radius: 12px;
+  background: linear-gradient(180deg, rgba(48, 12, 124, .88), rgba(36, 6, 98, .92)); border: 1.2px solid rgba(130, 110, 255, .62); box-shadow: 0 0 12px rgba(110, 80, 240, .4), inset 0 0 16px rgba(120, 80, 240, .18); }
+.ev-mile > * { position: absolute; }
+.ev-mile-h { left: 14px; top: 8px; display: flex; align-items: center; gap: 7px; }
+.ev-mile-h b { font-size: 11.500px; font-weight: 700; color: #fff; }
+.ev-mile-h svg { filter: drop-shadow(0 0 5px rgba(255, 200, 60, .7)); }
+.ev-mbox { top: 31px; width: 44px; height: 38px; box-sizing: border-box; display: grid; place-items: center; border-radius: 9px !important; color: #fff;
+  background: linear-gradient(180deg, rgba(86, 40, 190, .9), rgba(54, 20, 140, .92)) !important; border: 1.2px solid rgba(170, 130, 255, .85) !important; box-shadow: 0 0 8px rgba(150, 100, 255, .5); transition: transform .12s, filter .12s; }
+.ev-mbox em { position: absolute; right: 3px; bottom: 1px; font-size: 9.500px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #1a0050; }
+.ev-mtail { position: absolute; left: 50%; bottom: -5px; margin-left: -4px; width: 8px; height: 8px; transform: rotate(45deg); border-right: 1.2px solid rgba(170, 130, 255, .85); border-bottom: 1.2px solid rgba(170, 130, 255, .85); background: rgba(54, 20, 140, .95); }
+.ev-mbox.ready { border-color: #ffd96a !important; box-shadow: 0 0 12px rgba(255, 200, 70, .85), inset 0 0 8px rgba(255, 210, 90, .25); animation: ev-ready 1.4s ease-in-out infinite; }
+.ev-mbox.ready:hover { transform: translateY(-2px); }
+@keyframes ev-ready { 50% { box-shadow: 0 0 18px rgba(255, 210, 90, 1), inset 0 0 10px rgba(255, 220, 110, .35); } }
+.ev-mbox.claimed { opacity: .55; border-color: rgba(190, 150, 90, .8) !important; background: linear-gradient(180deg, rgba(110, 70, 60, .55), rgba(70, 40, 80, .6)) !important; }
+.ev-mbox.claimed .ev-mtail { border-color: rgba(190, 150, 90, .8); }
+.ev-mbox:disabled { cursor: default !important; }
+.ev-mbox.locked { cursor: default !important; }
+.ev-mbox.locked:not(.claimed) em { opacity: .55; }
+.ev-mbox.locked svg { opacity: .88; }
+.ev-mchk { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d9a63a, #8d5b12); border: 1.5px solid #f0c860; }
+
+.ev-track { left: 15px; top: 84px; width: 235px; height: 6px; }
+.ev-track > i { position: absolute; left: 0; top: 0; height: 100%; border-radius: 3px; }
+.ev-track-bg { width: 100%; background: linear-gradient(90deg, #8e5cf0, #b98bff 60%, #7a46e0); opacity: .9; }
+.ev-track-fill { background: linear-gradient(90deg, #ffe45a, #ffd02a 70%, #ffe27a); box-shadow: 0 0 8px rgba(255, 210, 60, .8); }
+.ev-node { top: 81px; width: 14px; height: 14px; box-sizing: border-box; border-radius: 50%; background: #fff; border: 2px solid #fff; box-shadow: 0 0 7px rgba(255, 255, 255, .85); }
+.ev-node.on { background: #ffd93a; box-shadow: 0 0 9px rgba(255, 210, 60, .95); }
+.ev-nlab { top: 96px; width: 40px; text-align: center; font-size: 11px; font-weight: 700; color: #fff; }
+
+.ev-pts { left: 282px; top: 39px; width: 66px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ev-pts > span { font-size: 10.500px; font-weight: 700; color: #fff; white-space: nowrap; }
+.ev-pts > div { width: 67px; height: 23px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 12px;
+  background: linear-gradient(180deg, rgba(70, 24, 160, .9), rgba(46, 12, 120, .92)); border: 1.2px solid rgba(160, 125, 255, .8); box-shadow: 0 0 8px rgba(140, 100, 255, .45); }
+.ev-pts b { font-size: 13px; font-weight: 800; color: #fff; }
+
+/* Sự kiện Tuần */
+.ew-content {position:absolute;inset:0;color:#fff;font-weight:700}
+.ew-card {position:absolute;left:155px;top:13px;width:194px;height:222px;border:1.5px solid #bd87ff;border-radius:14px;background:radial-gradient(ellipse at 50% 45%,#a04ff0,#3d087f 75%);box-shadow:0 0 14px #a85bff;text-align:center}
+.ew-calendar {display:block;font-size:102px;line-height:145px;filter:drop-shadow(0 0 15px #ff85ec)}
+.ew-card-title {font-size:12px;line-height:16px;margin-top:0}
+.ew-card-date {position:absolute;bottom:7px;left:8px;right:8px;border:1px solid #bf80ff;border-radius:14px;background:#37076e;display:flex;justify-content:center;align-items:center;gap:4px;font-size:10px;height:22px}
+.ew-missions {position:absolute;left:362px;top:13px;width:403px;height:230px}
+.ew-heading {position:absolute;left:0;top:0;width:126px;height:24px;border-radius:16px;background:linear-gradient(90deg,#7b25e8,#d62de8);text-align:center;line-height:24px;font-size:13px;box-shadow:0 0 9px #9b36ff}
+.ew-summary {position:absolute;right:3px;top:0;text-align:right;font-size:11px}
+.ew-summary-bar {width:114px;height:7px;background:#6333b8;border-radius:8px;margin-top:4px;overflow:hidden}
+.ew-summary-bar i,.ew-progress i,.ew-mile-track i {display:block;height:100%;background:linear-gradient(90deg,#ffd129,#fff3a4);border-radius:8px}
+.ew-row {position:absolute;left:0;width:403px;height:35px;border:1px solid #8146ce;border-radius:8px;background:linear-gradient(90deg,#4c138f,#310568)}
+.ew-icon {position:absolute;left:7px;top:5px;color:#f5d7ff}
+.ew-label {position:absolute;left:43px;top:3px;font-size:10px;white-space:nowrap}
+.ew-progress {position:absolute;left:43px;top:22px;width:117px;height:6px;border-radius:6px;background:#60369a;overflow:hidden}
+.ew-count {position:absolute;left:169px;top:16px;font-size:10px}
+.ew-reward {position:absolute;left:232px;top:3px;display:flex;align-items:center;gap:5px;font-size:10px}
+.ew-button {position:absolute!important;right:5px;top:6px;width:58px;height:24px;border:1px solid #b679ff!important;border-radius:14px!important;background:linear-gradient(#6727d6,#45138d)!important;box-shadow:0 0 8px #a052ff;color:#fff!important;font-weight:800;font-size:11px}
+.ew-button.ready {background:linear-gradient(#fff06b,#ffc000)!important;color:#5a3100!important;border-color:#ffe96a!important}
+.ew-mile {position:absolute;left:155px;top:249px;width:610px;height:66px;border:1px solid #7435c1;border-radius:10px;background:#34066b}
+.ew-mile-title {position:absolute;left:10px;top:10px;display:flex;gap:8px;align-items:center;font-size:12px}
+.ew-mile-track {position:absolute;left:132px;top:47px;width:450px;height:6px;background:#6e39b7;border-radius:8px}
+.ew-mile-item {position:absolute;top:4px;width:52px;text-align:center}
+.ew-mile-item button {position:relative!important;width:39px;height:35px;border:1px solid #a964f5!important;border-radius:9px!important;background:#54169a!important;display:grid;place-items:center;margin:auto;box-shadow:0 0 7px #9a36ff}
+.ew-mile-item button.ready {border-color:#ffd84d!important;box-shadow:0 0 9px #ffd84d}
+.ew-mile-item small {position:absolute;bottom:0;right:2px;font-size:9px}
+.ew-mile-item>i {display:block;width:12px;height:12px;background:#fff;border-radius:50%;margin:4px auto 0;position:relative;z-index:1}
+.ew-mile-item>b {font-size:10px}
+
+
+/* Sự kiện Tuần: bỏ thẻ lịch, mở rộng khu vực nhiệm vụ */
+.ew-card {display:none!important}
+.ew-missions {left:155px;top:13px;width:610px;height:230px}
+.ew-heading {left:0;top:0}
+.ew-week-date {position:absolute;left:140px;top:1px;height:23px;display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid #a96df2;border-radius:14px;background:rgba(56,7,113,.88);color:#f9eaff;font-size:11px;white-space:nowrap}
+.ew-summary {right:3px;top:0}
+.ew-row {width:610px}
+.ew-label {left:47px;font-size:11px}
+.ew-progress {left:47px;width:245px}
+.ew-count {left:305px}
+.ew-reward {left:415px}
+.ew-button {right:8px}
+
+/* Bảng nội dung cho Sự kiện Đặc biệt và Thông báo */
+.ev-other-panel{position:absolute;left:155px;top:20px;width:610px;height:285px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:1px solid #9951e7;border-radius:15px;background:radial-gradient(ellipse at center,#6412ac,#30065d);color:white;text-align:center}
+.ev-other-icon{color:#ffdb70;filter:drop-shadow(0 0 12px #c44aff)}
+.ev-other-panel h2{font-size:25px;margin:0;color:#fff}
+.ev-other-panel p{font-size:14px;margin:0;color:#eadbff}
+.ev-other-panel button{padding:9px 24px;border:1px solid #dba2ff;border-radius:18px;background:#8e20db;color:white;font-weight:bold;cursor:pointer}
+
+/* FIX: các tab luôn nhận click, bất kể nội dung sự kiện nào đang mở.
+   WeeklyContent có inset:0 nên trước đây phủ lên toàn bộ thanh tab. */
+.ev-main > .ev-tabs { z-index: 30 !important; pointer-events: auto !important; }
+.ev-tabs .ev-tab { z-index: 31 !important; pointer-events: auto !important; cursor: pointer !important; }
+.ev-main > .ew-content { z-index: 1 !important; }
+.ev-main > .ev-other-panel { z-index: 1 !important; }
+.ew-summary { display: none !important; }
