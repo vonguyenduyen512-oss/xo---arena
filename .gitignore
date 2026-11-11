@@ -7,3 +7,13 @@ server/*.json
 server/*.bak
 server/*.backup-*
 server/*.balance-backup
+node_modules/
+dist/
+.env
+.env.*
+server/*.json
+server/*.bak
+server/*.backup-*
+server/*.balance-backup
+
+*.backup
